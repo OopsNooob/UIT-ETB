@@ -1,15 +1,15 @@
 "use client";
 
-import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@/lib/mockComponents";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/images/logo.png";
 import SearchBar from "./SearchBar";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useQuery, mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
 import { Shield } from "lucide-react";
 
-const ADMIN_EMAILS = ["dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com"];
+const ADMIN_EMAILS = ["dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com", "23520657@gm.uit.edu.vn"];
 
 function Header() {
   const { user } = useUser();

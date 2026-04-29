@@ -1,16 +1,17 @@
 "use client";
 
 import { XCircle } from "lucide-react";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+import { useMutation, useQuery } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { purchaseTicketAction } from "@/app/actions/purchaseTicket";
 import RoleGuard from "@/components/RoleGuard";
 
-export default function PurchaseTicket({ eventId }: { eventId: Id<"events"> }) {
+export default function PurchaseTicket({ eventId }: { eventId: string }) {
   const router = useRouter();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);

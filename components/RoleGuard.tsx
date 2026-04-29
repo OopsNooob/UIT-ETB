@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useUser } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
 import Spinner from "./Spinner";
 
 interface RoleGuardProps {

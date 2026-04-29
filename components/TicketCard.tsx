@@ -1,8 +1,9 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Doc - no longer needed
+// import { Doc } from "@/convex/_generated/dataModel";
+import { useQuery } from "@/lib/mockHooks";
 import { Download } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
@@ -227,3 +228,4 @@ export default function TicketCard({ ticket }: TicketCardProps) {
     </div>
   );
 }
+

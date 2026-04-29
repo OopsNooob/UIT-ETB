@@ -1,7 +1,7 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
 import { useSearchParams } from "next/navigation";
 import EventCard from "@/components/EventCard";
 import { Search } from "lucide-react";
@@ -10,23 +10,16 @@ import Spinner from "@/components/Spinner";
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const searchResults = useQuery(api.events.search, { searchTerm: query });
-
-  if (!searchResults) {
-    return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  const searchResultsData = useQuery(api.events.search, { searchTerm: query });
+  const searchResults = searchResultsData || [];
 
   const upcomingEvents = searchResults
-    .filter((event) => event.eventDate > Date.now())
-    .sort((a, b) => a.eventDate - b.eventDate);
+    .filter((event: any) => event.eventDate > Date.now())
+    .sort((a: any, b: any) => a.eventDate - b.eventDate);
 
   const pastEvents = searchResults
-    .filter((event) => event.eventDate <= Date.now())
-    .sort((a, b) => b.eventDate - a.eventDate);
+    .filter((event: any) => event.eventDate <= Date.now())
+    .sort((a: any, b: any) => b.eventDate - a.eventDate);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -64,7 +57,7 @@ export default function SearchPage() {
               Upcoming Events
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {upcomingEvents.map((event) => (
+              {upcomingEvents.map((event: any) => (
                 <EventCard key={event._id} eventId={event._id} />
               ))}
             </div>
@@ -78,7 +71,7 @@ export default function SearchPage() {
               Past Events
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pastEvents.map((event) => (
+              {pastEvents.map((event: any) => (
                 <EventCard key={event._id} eventId={event._id} />
               ))}
             </div>
@@ -88,3 +81,4 @@ export default function SearchPage() {
     </div>
   );
 }
+

@@ -61,7 +61,7 @@ describe('Custom Hooks', () => {
   describe('useStorageUrl Hook', () => {
     it('should generate URL from storage ID', () => {
       const storageId = 'img-123'
-      const baseUrl = 'https://api.convex.dev/storage'
+      const baseUrl = 'https://mockApi.convex.dev/storage'
       const url = `${baseUrl}/${storageId}`
 
       expect(url).toContain(storageId)
@@ -77,7 +77,7 @@ describe('Custom Hooks', () => {
     it('should cache URLs', () => {
       const cache = new Map()
       const storageId = 'img-1'
-      const url = 'https://api.example.com/img-1'
+      const url = 'https://mockApi.example.com/img-1'
 
       cache.set(storageId, url)
       expect(cache.has(storageId)).toBe(true)

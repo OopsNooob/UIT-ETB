@@ -2,8 +2,9 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { sendMultipleTicketsEmailAction } from "./sendTicketEmail";
 
 export async function purchaseTicketAction({
@@ -37,7 +38,7 @@ export async function purchaseTicketAction({
   try {
     console.log("📞 Calling Convex mutation...");
     
-    const result = await convex.mutation(api.events.purchaseTicket, {
+    const result = await convex.mutation(mockApi.events.purchaseTicket, {
       eventId,
       userId,
       waitingListId,

@@ -1,8 +1,8 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
 import {
   CalendarDays,
   Edit,
@@ -15,19 +15,20 @@ import Link from "next/link";
 import { useStorageUrl } from "@/lib/utils";
 import Image from "next/image";
 import CancelEventButton from "./CancelEventButton";
-import { Doc } from "@/convex/_generated/dataModel";
-import { Metrics } from "@/convex/events";
+// Mock Doc - no longer needed
+// import { Doc } from "@/convex/_generated/dataModel";
+// Mock Metrics - no longer needed
+// import { Metrics } from "@/convex/events";
 
 export default function SellerEventList() {
   const { user } = useUser();
-  const events = useQuery(api.events.getSellerEvents, {
+  const eventsData = useQuery(api.events.getSellerEvents, {
     userId: user?.id ?? "",
   });
+  const events = eventsData || [];
 
-  if (!events) return null;
-
-  const upcomingEvents = events.filter((e) => e.eventDate > Date.now());
-  const pastEvents = events.filter((e) => e.eventDate <= Date.now());
+  const upcomingEvents = events.filter((e: any) => e.eventDate > Date.now());
+  const pastEvents = events.filter((e: any) => e.eventDate <= Date.now());
 
   return (
     <div className="mx-auto space-y-8">
@@ -37,7 +38,7 @@ export default function SellerEventList() {
           Upcoming Events
         </h2>
         <div className="grid grid-cols-1 gap-6">
-          {upcomingEvents.map((event) => (
+          {upcomingEvents.map((event: any) => (
             <SellerEventCard key={event._id} event={event} />
           ))}
           {upcomingEvents.length === 0 && (
@@ -51,7 +52,7 @@ export default function SellerEventList() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Past Events</h2>
           <div className="grid grid-cols-1 gap-6">
-            {pastEvents.map((event) => (
+            {pastEvents.map((event: any) => (
               <SellerEventCard key={event._id} event={event} />
             ))}
           </div>
@@ -64,9 +65,7 @@ export default function SellerEventList() {
 function SellerEventCard({
   event,
 }: {
-  event: Doc<"events"> & {
-    metrics: Metrics;
-  };
+  event: any;
 }) {
   const imageUrl = useStorageUrl(event.imageStorageId);
   const isPastEvent = event.eventDate < Date.now();
@@ -195,3 +194,4 @@ function SellerEventCard({
     </div>
   );
 }
+

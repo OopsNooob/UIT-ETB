@@ -2,8 +2,9 @@
 
 import { sendTicketEmail, sendMultipleTicketsEmail } from "@/lib/email";
 import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 
 // ============================================================================
 // RETRY MECHANISM FOR FAULT TOLERANCE (Availability - ASR ID 39)
@@ -106,7 +107,7 @@ export async function sendTicketEmailAction(ticketId: Id<"tickets">) {
   try {
     // Get ticket details with retry
     const ticket = await withRetry(
-      () => convex.query(api.tickets.getTicketWithDetails, { ticketId }),
+      () => convex.query(mockApi.tickets.getTicketWithDetails, { ticketId }),
       `Fetch ticket details for ${ticketId}`
     );
 
@@ -119,7 +120,7 @@ export async function sendTicketEmailAction(ticketId: Id<"tickets">) {
 
     // Get user details with retry
     const user = await withRetry(
-      () => convex.query(api.users.getUserById, { userId: ticket.userId }),
+      () => convex.query(mockApi.users.getUserById, { userId: ticket.userId }),
       `Fetch user details for ${ticket.userId}`
     );
 
@@ -196,7 +197,7 @@ export async function sendMultipleTicketsEmailAction(ticketIds: Id<"tickets">[])
     console.log("Fetching ticket details...");
     const ticketPromises = ticketIds.map(ticketId =>
       withRetry(
-        () => convex.query(api.tickets.getTicketWithDetails, { ticketId }),
+        () => convex.query(mockApi.tickets.getTicketWithDetails, { ticketId }),
         `Fetch ticket details for ${ticketId}`
       )
     );
@@ -223,7 +224,7 @@ export async function sendMultipleTicketsEmailAction(ticketIds: Id<"tickets">[])
     // Get user details with retry
     console.log("Fetching user details for userId:", userId);
     const user = await withRetry(
-      () => convex.query(api.users.getUserById, { userId }),
+      () => convex.query(mockApi.users.getUserById, { userId }),
       `Fetch user details for ${userId}`
     );
 

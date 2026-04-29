@@ -1,8 +1,9 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import {
   CalendarDays,
   MapPin,
@@ -14,12 +15,12 @@ import {
   PencilIcon,
   StarIcon,
 } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/mockHooks";
 import { useRouter } from "next/navigation";
 import { useStorageUrl } from "@/lib/utils";
 import Image from "next/image";
 
-export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
+export default function EventCard({ eventId }: { eventId: any }) {
   const { user } = useUser();
   const router = useRouter();
   const event = useQuery(api.events.getById, { eventId });

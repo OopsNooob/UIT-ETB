@@ -4,8 +4,8 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 // Import Convex nếu bạn muốn làm dropdown live search (Gợi ý kết quả) ngay tại ô tìm kiếm
-// import { useQuery } from "convex/react";
-// import { api } from "@/convex/_generated/api";
+// import { useQuery } from "@/lib/mockHooks";
+// import { mockApi as api } from "@/lib/mockHooks";
 
 // 1. Custom Hook useDebounce tự viết (không cần chạy npm install)
 function useDebounce<T>(value: T, delay: number): T {

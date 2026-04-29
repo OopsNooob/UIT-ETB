@@ -1,12 +1,13 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
 import { redirect, useRouter } from "next/navigation";
 import { Ticket, Calendar, MapPin, ArrowLeft, Download } from "lucide-react";
 import { useParams } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { useStorageUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import Spinner from "@/components/Spinner";
@@ -17,7 +18,7 @@ export default function EventTicketsPage() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const params = useParams();
-  const eventId = params.id as Id<"events">;
+  const eventId = params.id as string;
 
   const tickets = useQuery(
     api.events.getUserTickets,
@@ -36,7 +37,7 @@ export default function EventTicketsPage() {
     redirect("/sign-in");
   }
 
-  if (!tickets || !event) {
+  if (!event) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Spinner />
@@ -44,9 +45,8 @@ export default function EventTicketsPage() {
     );
   }
 
-  // Filter tickets for this event only
-  const eventTickets = tickets.filter(
-    (ticket) => ticket && ticket.eventId === eventId && ticket.event
+  const eventTickets = (tickets || []).filter(
+    (ticket: any) => ticket && ticket.eventId === eventId && ticket.event
   );
 
   const isEventEnded = event.eventDate ? new Date(event.eventDate) < new Date() : false;
@@ -241,7 +241,7 @@ export default function EventTicketsPage() {
 
           {/* Tickets Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eventTickets.map((ticket, index) => {
+            {eventTickets.map((ticket: any, index: number) => {
               const displayStatus = isEventEnded && ticket.status === "valid" ? "ended" : ticket.status;
 
               return (

@@ -1,20 +1,22 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
-import { WAITING_LIST_STATUS } from "@/convex/constants";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useMutation, useQuery } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+const WAITING_LIST_STATUS = { WAITING: 'waiting', ACCEPTED: 'accepted', REJECTED: 'rejected', OFFERED: 'offered' };
 import Spinner from "./Spinner";
 import PurchaseTicket from "./PurchaseTicket";
 import { Clock, OctagonXIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ConvexError } from "convex/values";
+// Mock ConvexError - no longer needed
+// import { ConvexError } from "convex/values";
 
 export default function JoinQueue({
   eventId,
   userId,
 }: {
-  eventId: Id<"events">;
+  eventId: string;
   userId: string;
 }) {
   const { toast } = useToast();
@@ -80,20 +82,12 @@ export default function JoinQueue({
         description: "You have been added to the waiting list.",
       });
     } catch (error) {
-      if (error instanceof ConvexError) {
-        toast({
-          variant: "destructive",
-          title: "Cannot join waiting list",
-          description: error.message,
-        });
-      } else {
-        console.error(error);
-        toast({
-          variant: "destructive",
-          title: "Something went wrong",
-          description: "Please try again later.",
-        });
-      }
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "Failed to join the waiting list. Please try again.",
+      });
     }
   };
 
@@ -159,3 +153,4 @@ export default function JoinQueue({
     </button>
   );
 }
+

@@ -1,8 +1,9 @@
 "use server";
 
 import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { auth } from "@clerk/nextjs/server";
 
 export async function refundEventTickets(eventId: Id<"events">) {
@@ -15,11 +16,11 @@ export async function refundEventTickets(eventId: Id<"events">) {
   const convex = getConvexClient();
 
   // Get event details
-  const event = await convex.query(api.events.getById, { eventId });
+  const event = await convex.query(mockApi.events.getById, { eventId });
   if (!event) throw new Error("Event not found");
 
   // Get all valid tickets for this event
-  const tickets = await convex.query(api.tickets.getValidTicketsForEvent, {
+  const tickets = await convex.query(mockApi.tickets.getValidTicketsForEvent, {
     eventId,
   });
 
@@ -32,13 +33,13 @@ export async function refundEventTickets(eventId: Id<"events">) {
         }
 
         // Issue refund through Convex payments
-        await convex.mutation(api.payments.refundPayment, {
+        await convex.mutation(mockApi.payments.refundPayment, {
           paymentId: ticket.paymentId,
           organizerId: userId, // Bổ sung organizerId để check isolation
         });
 
         // Update ticket status to refunded
-        await convex.mutation(api.tickets.updateTicketStatus, {
+        await convex.mutation(mockApi.tickets.updateTicketStatus, {
           ticketId: ticket._id,
           status: "refunded",
           organizerId: userId, // Bổ sung organizerId để check isolation
@@ -64,7 +65,7 @@ export async function refundEventTickets(eventId: Id<"events">) {
   }
 
   // Cancel the event
-  await convex.mutation(api.events.cancelEvent, { 
+  await convex.mutation(mockApi.events.cancelEvent, { 
     eventId,
     userId: userId // Bổ sung userId để check isolation
   });

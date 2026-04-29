@@ -2,7 +2,7 @@
 // import { headers } from "next/headers";
 // import { stripe } from "@/lib/stripe";
 // import { getConvexClient } from "@/lib/convex";
-// import { api } from "@/convex/_generated/api";
+// import { mockApi as api } from "@/lib/mockHooks";
 // import Stripe from "stripe";
 // import { StripeCheckoutMetaData } from "@/app/actions/createStripeCheckoutSession";
 
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     console.log("Convex client:", convex);
 
     try {
-      const result = await convex.mutation(api.events.purchaseTicket, {
+      const result = await convex.mutation(mockApi.events.purchaseTicket, {
         eventId: metadata.eventId,
         userId: metadata.userId,
         waitingListId: metadata.waitingListId,

@@ -1,11 +1,12 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/mockHooks";
 import EventList from "./EventList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, History } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import RoleGuard from "@/components/RoleGuard";
 
 // Prevent static prerendering for this page

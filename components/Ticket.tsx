@@ -1,8 +1,9 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "@/lib/mockHooks";
 import {
   CalendarDays,
   IdCard,
@@ -166,3 +167,4 @@ export default function Ticket({ ticketId }: { ticketId: Id<"tickets"> }) {
     </div>
   );
 }
+

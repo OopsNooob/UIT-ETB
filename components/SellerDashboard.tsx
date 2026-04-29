@@ -1,8 +1,8 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
 import { CalendarDays, DollarSign, Plus, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import Spinner from "./Spinner";
@@ -28,13 +28,25 @@ export default function SellerDashboard() {
   const stats = useQuery(
     api.payments.getSellerStats,
     user ? { userId: user.id } : "skip"
-  );
+  ) || {
+    totalRevenue: 0,
+    netRevenue: 0,
+    totalTicketsSold: 0,
+    totalEvents: 0,
+    averageTicketPrice: 0,
+    pendingAmount: 0,
+    totalRefunded: 0,
+  };
 
   // Get monthly statistics
   const monthlyStats = useQuery(
     api.payments.getSellerStatsByMonth,
     user ? { userId: user.id, month: selectedMonth, year: selectedYear } : "skip"
-  );
+  ) || {
+    monthlyRevenue: 0,
+    monthlyTicketsSold: 0,
+    eventBreakdown: [],
+  };
 
   /**
    * Handle export of revenue data
@@ -45,7 +57,7 @@ export default function SellerDashboard() {
     if (format === "csv") {
       // Prepare revenue report data
       const revenueData: RevenueReportRow[] = monthlyStats.eventBreakdown.map(
-        (event) => ({
+        (event: any) => ({
           eventId: event.eventId,
           eventName: event.eventName,
           eventDate: formatDateForExport(new Date()),
@@ -302,7 +314,7 @@ export default function SellerDashboard() {
             {/* Event Breakdown Table */}
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Performance</h3>
-              {monthlyStats.eventBreakdown.length > 0 ? (
+              {monthlyStats?.eventBreakdown?.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-50">
@@ -319,7 +331,7 @@ export default function SellerDashboard() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {monthlyStats.eventBreakdown.map((event) => (
+                      {monthlyStats.eventBreakdown.map((event: any) => (
                         <tr key={event.eventId} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">{event.eventName}</div>

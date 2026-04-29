@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useQuery, useMutation } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
 import { useState } from "react";
 import { toast } from "sonner";
 import { CheckCircle, AlertCircle, Users, RefreshCw, Trash2, Shield, AlertTriangle, UserX } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/mockHooks";
 import { useRouter } from "next/navigation";
 
 const ADMIN_EMAILS = ["dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com"];
@@ -15,20 +15,20 @@ export default function MigrationPage() {
   const router = useRouter();
   const [isRunning, setIsRunning] = useState(false);
   
-  const status = useQuery(api.migrations.checkUsersRoleStatus);
-  const usersWithEvents = useQuery(api.migrations.getUsersWithEvents);
-  const conflictTickets = useQuery(api.migrations.findConflictTickets);
-  const ticketsOverview = useQuery(api.migrations.getTicketsOverview);
-  const purchasedWaitingList = useQuery(api.migrations.checkPurchasedWaitingListEntries);
-  const oversoldEvents = useQuery(api.migrations.checkOversoldEvents);
-  const orphanedPayments = useQuery(api.migrations.checkOrphanedPayments);
+  const status = useQuery(mockApi.migrations.checkUsersRoleStatus);
+  const usersWithEvents = useQuery(mockApi.migrations.getUsersWithEvents);
+  const conflictTickets = useQuery(mockApi.migrations.findConflictTickets);
+  const ticketsOverview = useQuery(mockApi.migrations.getTicketsOverview);
+  const purchasedWaitingList = useQuery(mockApi.migrations.checkPurchasedWaitingListEntries);
+  const oversoldEvents = useQuery(mockApi.migrations.checkOversoldEvents);
+  const orphanedPayments = useQuery(mockApi.migrations.checkOrphanedPayments);
   
-  const migrateRoles = useMutation(api.migrations.migrateUserRoles);
-  const resetRoles = useMutation(api.migrations.resetAllRolesToUser);
-  const deleteConflicts = useMutation(api.migrations.deleteConflictTickets);
-  const expireWaitingList = useMutation(api.migrations.expirePurchasedWaitingListEntries);
-  const deleteWaitingList = useMutation(api.migrations.deletePurchasedWaitingListEntries);
-  const cleanupPayments = useMutation(api.migrations.cleanupOrphanedPayments);
+  const migrateRoles = useMutation(mockApi.migrations.migrateUserRoles);
+  const resetRoles = useMutation(mockApi.migrations.resetAllRolesToUser);
+  const deleteConflicts = useMutation(mockApi.migrations.deleteConflictTickets);
+  const expireWaitingList = useMutation(mockApi.migrations.expirePurchasedWaitingListEntries);
+  const deleteWaitingList = useMutation(mockApi.migrations.deletePurchasedWaitingListEntries);
+  const cleanupPayments = useMutation(mockApi.migrations.cleanupOrphanedPayments);
 
   // Check admin access
   if (isLoaded && !user) {

@@ -1,18 +1,19 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
-import { useQuery, useMutation } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
+import { useQuery, useMutation } from "@/lib/mockHooks";
 import { redirect, useRouter } from "next/navigation";
 import { Ticket, Calendar, MapPin, ChevronRight, Search } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { useStorageUrl } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import RoleGuard from "@/components/RoleGuard";
 
 interface GroupedTickets {
-  eventId: Id<"events">;
+  eventId: string;
   event: any;
   tickets: any[];
   validCount: number;
@@ -129,10 +130,11 @@ function EventTicketCard({
 export default function MyTicketsPage() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
-  const tickets = useQuery(
+  const ticketsData = useQuery(
     api.events.getUserTickets,
     user ? { userId: user.id } : "skip"
   );
+  const tickets = ticketsData || [];
   const updateExpiredTickets = useMutation(api.tickets.updateExpiredTicketsForUser);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -157,12 +159,12 @@ export default function MyTicketsPage() {
   }
 
   const validTickets = tickets.filter(
-    (ticket) => ticket && ticket._id && ticket.event
+    (ticket: any) => ticket && ticket._id && ticket.event
   );
 
-  const groupedTicketsMap = new Map<Id<"events">, GroupedTickets>();
+  const groupedTicketsMap = new Map<string, GroupedTickets>();
   
-  validTickets.forEach((ticket) => {
+  validTickets.forEach((ticket: any) => {
     const eventId = ticket.eventId;
     if (!groupedTicketsMap.has(eventId)) {
       groupedTicketsMap.set(eventId, {
@@ -316,3 +318,4 @@ export default function MyTicketsPage() {
     </RoleGuard>
   );
 }
+

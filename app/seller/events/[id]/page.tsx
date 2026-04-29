@@ -1,8 +1,9 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { useParams, useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
 import { ArrowLeft, Calendar, MapPin, Ticket, DollarSign, Users, Edit } from "lucide-react";
@@ -12,7 +13,7 @@ import RoleGuard from "@/components/RoleGuard";
 export default function EventDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const eventId = params.id as Id<"events">;
+  const eventId = params.id as string;
 
   const event = useQuery(api.events.getEventById, { eventId });
   const tickets = useQuery(api.tickets.getValidTicketsForEvent, { eventId });
@@ -26,11 +27,10 @@ export default function EventDetailsPage() {
       </div>
     );
   }
-
   // Calculate tickets sold from actual tickets
-  const ticketsSold = tickets.length;
-  const revenue = ticketsSold * event.price;
-  const attendees = tickets.filter((t) => t.status === "used").length;
+  const ticketsSold = (tickets || []).length;
+  const revenue = ticketsSold * (event?.price || 0);
+  const attendees = (tickets || []).filter((t: any) => t.status === "used").length;
 
   return (
     <RoleGuard allowedRole="organizer">
@@ -189,14 +189,14 @@ export default function EventDetailsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {tickets.length === 0 ? (
+                {(tickets || []).length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
                       No tickets sold yet
                     </td>
                   </tr>
                 ) : (
-                  tickets.map((ticket) => (
+                  (tickets || []).map((ticket: any) => (
                     <tr key={ticket._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="font-mono text-sm">

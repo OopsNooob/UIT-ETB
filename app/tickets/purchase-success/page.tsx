@@ -1,9 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { CheckCircle } from "lucide-react";
 import { useEffect } from "react";
 
@@ -71,3 +72,4 @@ export default function PurchaseSuccessPage() {
     </div>
   );
 }
+

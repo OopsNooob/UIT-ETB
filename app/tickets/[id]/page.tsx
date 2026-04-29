@@ -1,9 +1,10 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
 import { redirect, useParams } from "next/navigation";
 import Ticket from "@/components/Ticket";
 import Link from "next/link";
@@ -13,8 +14,9 @@ import { useEffect } from "react";
 export default function TicketPage() {
   const params = useParams();
   const { user } = useUser();
+  const ticketId = params.id as string;
   const ticket = useQuery(api.tickets.getTicketWithDetails, {
-    ticketId: params.id as Id<"tickets">,
+    ticketId,
   });
 
   useEffect(() => {

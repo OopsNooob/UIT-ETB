@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Ban } from "lucide-react";
 import { refundEventTickets } from "@/app/actions/refundEventTickets";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
+import { useMutation } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useUser } from "@/lib/mockHooks";
 
 export default function CancelEventButton({
   eventId,
@@ -22,7 +23,7 @@ export default function CancelEventButton({
   // 1. Lấy thông tin user hiện tại từ Clerk (Client-side)
   const { user } = useUser(); 
   
-  const cancelEvent = useMutation(api.events.cancelEvent);
+  const cancelEvent = useMutation(mockApi.events.cancelEvent);
 
   const handleCancel = async () => {
     // 2. Kiểm tra an toàn: Đảm bảo user đã được load xong

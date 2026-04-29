@@ -13,13 +13,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useUser } from "@/lib/mockHooks";
+import { useMutation } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useStorageUrl } from "@/lib/utils";
@@ -371,3 +372,4 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
     </Form>
   );
 }
+

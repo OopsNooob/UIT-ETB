@@ -128,8 +128,8 @@ describe('Webhook Handlers', () => {
 
   describe('Webhook Security', () => {
     it('should verify webhook origin', () => {
-      const trustedOrigins = ['https://api.stripe.com']
-      const origin = 'https://api.stripe.com'
+      const trustedOrigins = ['https://mockApi.stripe.com']
+      const origin = 'https://mockApi.stripe.com'
 
       expect(trustedOrigins).toContain(origin)
     })

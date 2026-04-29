@@ -1,17 +1,19 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 import EventForm from "@/components/EventForm";
 import { AlertCircle } from "lucide-react";
 import RoleGuard from "@/components/RoleGuard";
 
 export default function EditEventPage() {
   const params = useParams();
+  const eventId = params.id as string;
   const event = useQuery(api.events.getById, {
-    eventId: params.id as Id<"events">,
+    eventId,
   });
 
   if (!event) return null;

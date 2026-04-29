@@ -1,8 +1,9 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "@/lib/mockHooks";
 import { useState } from "react";
 import { XCircle } from "lucide-react";
 
@@ -14,7 +15,7 @@ export default function ReleaseTicket({
   waitingListId: Id<"waitingList">;
 }) {
   const [isReleasing, setIsReleasing] = useState(false);
-  const releaseTicket = useMutation(api.waitingList.releaseTicket);
+  const releaseTicket = useMutation(mockApi.waitingList.releaseTicket);
 
   const handleRelease = async () => {
     if (!confirm("Are you sure you want to release your ticket offer?")) return;

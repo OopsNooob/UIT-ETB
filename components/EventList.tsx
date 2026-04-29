@@ -1,15 +1,15 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery } from "@/lib/mockHooks";
 import EventCard from "./EventCard";
 import Spinner from "./Spinner";
 import { CalendarDays, Ticket } from "lucide-react";
 
 export default function EventList() {
-  const events = useQuery(api.events.get);
+  const events = useQuery(api.events.getAllEvents);
 
-  if (!events) {
+  if (!events || !Array.isArray(events)) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <Spinner />
@@ -18,12 +18,12 @@ export default function EventList() {
   }
 
   const upcomingEvents = events
-    .filter((event) => event.eventDate > Date.now())
-    .sort((a, b) => a.eventDate - b.eventDate);
+    .filter((event: any) => event.eventDate > Date.now())
+    .sort((a: any, b: any) => a.eventDate - b.eventDate);
 
   const pastEvents = events
-    .filter((event) => event.eventDate <= Date.now())
-    .sort((a, b) => b.eventDate - a.eventDate);
+    .filter((event: any) => event.eventDate <= Date.now())
+    .sort((a: any, b: any) => b.eventDate - a.eventDate);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -48,7 +48,7 @@ export default function EventList() {
       {/* Upcoming Events Grid */}
       {upcomingEvents.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {upcomingEvents.map((event) => (
+          {upcomingEvents.map((event: any) => (
             <EventCard key={event._id} eventId={event._id} />
           ))}
         </div>
@@ -67,7 +67,7 @@ export default function EventList() {
         <>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Past Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pastEvents.map((event) => (
+            {pastEvents.map((event: any) => (
               <EventCard key={event._id} eventId={event._id} />
             ))}
           </div>

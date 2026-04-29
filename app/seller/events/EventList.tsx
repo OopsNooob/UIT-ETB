@@ -1,16 +1,17 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useQuery } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
 import Spinner from "@/components/Spinner";
 import { Calendar, Ticket, DollarSign, Clock } from "lucide-react";
 import { useStorageUrl } from "@/lib/utils";
-import { Id } from "@/convex/_generated/dataModel";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
 
 interface EventListProps {
   userId: string;
   filter: "upcoming" | "past";
-  onEventClick: (eventId: Id<"events">) => void;
+  onEventClick: (eventId: string) => void;
 }
 
 function EventCard({ event, onEventClick }: { event: any; onEventClick: () => void }) {
@@ -114,7 +115,7 @@ export default function EventList({ userId, filter, onEventClick }: EventListPro
   }
 
   const now = Date.now();
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = (events || []).filter((event: any) => {
     if (filter === "upcoming") {
       return event.eventDate >= now;
     } else {
@@ -140,7 +141,7 @@ export default function EventList({ userId, filter, onEventClick }: EventListPro
 
   return (
     <div className="space-y-6">
-      {filteredEvents.map((event) => (
+      {filteredEvents.map((event: any) => (
         <EventCard
           key={event._id}
           event={event}

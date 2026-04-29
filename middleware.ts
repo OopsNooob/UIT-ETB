@@ -1,4 +1,3 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -85,7 +84,7 @@ if (typeof globalThis !== 'undefined' && !('rateLimitCleanupInterval' in globalT
   setInterval(cleanupRateLimitStore, 5 * 60 * 1000);
 }
 
-export default clerkMiddleware(async (auth, req) => {
+export default function middleware(req: NextRequest) {
   // Get client identifier (IP address as fallback)
   const clientIP = getClientIP(req);
 
@@ -96,7 +95,6 @@ export default clerkMiddleware(async (auth, req) => {
     : RATE_LIMIT_CONFIG.maxRequests;
 
   // Use IP as identifier for rate limiting
-  // (Clerk auth is handled by clerkMiddleware separately)
   const identifier = clientIP;
 
   // Check rate limit
@@ -127,7 +125,7 @@ export default clerkMiddleware(async (auth, req) => {
   response.headers.set('X-RateLimit-Reset', String(Date.now() + RATE_LIMIT_CONFIG.windowMs));
 
   return response;
-});
+}
 
 export const config = {
   matcher: [

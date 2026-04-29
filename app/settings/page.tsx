@@ -1,8 +1,8 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useUser } from "@/lib/mockHooks";
+import { useQuery, useMutation } from "@/lib/mockHooks";
+import { mockApi as api } from "@/lib/mockHooks";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
@@ -57,8 +57,19 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl shadow-md p-8">
+        <div className="bg-white rounded-xl shadow-md p-8 mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Account Settings</h1>
+          
+          {/* Demo User Switcher */}
+          <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h2 className="text-lg font-semibold text-blue-900 mb-3">🧪 Demo: Switch Test Account</h2>
+            <p className="text-sm text-blue-800 mb-4">For testing different user types:</p>
+            <div className="space-y-2">
+              <DemoUserButton email="demo@example.com" name="Regular User (Buyer)" />
+              <DemoUserButton email="organizer@example.com" name="Organizer (Create Events)" />
+              <DemoUserButton email="dodinhkhang8@gmail.com" name="Admin + Organizer" />
+            </div>
+          </div>
           
           <div className="mb-8">
             <p className="text-gray-600 mb-2">
@@ -186,3 +197,70 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+function DemoUserButton({ email, name }: { email: string; name: string }) {
+  const { user } = useUser();
+  const isCurrentUser = user?.primaryEmailAddress?.emailAddress === email;
+
+  const handleSwitch = () => {
+    // Create mock user object based on email
+    let mockUser;
+    if (email === "demo@example.com") {
+      mockUser = {
+        id: "user_123",
+        email: "demo@example.com",
+        firstName: "Demo",
+        lastName: "User",
+        fullName: "Demo User",
+        primaryEmailAddress: { emailAddress: "demo@example.com" },
+        imageUrl: "https://www.gravatar.com/avatar/demo",
+      };
+    } else if (email === "organizer@example.com") {
+      mockUser = {
+        id: "organizer_123",
+        email: "organizer@example.com",
+        firstName: "John",
+        lastName: "Organizer",
+        fullName: "John Organizer",
+        primaryEmailAddress: { emailAddress: "organizer@example.com" },
+        imageUrl: "https://www.gravatar.com/avatar/organizer",
+      };
+    } else if (email === "dodinhkhang8@gmail.com") {
+      mockUser = {
+        id: "admin_123",
+        email: "dodinhkhang8@gmail.com",
+        firstName: "Admin",
+        lastName: "User",
+        fullName: "Admin User",
+        primaryEmailAddress: { emailAddress: "dodinhkhang8@gmail.com" },
+        imageUrl: "https://www.gravatar.com/avatar/admin",
+      };
+    }
+
+    if (mockUser) {
+      localStorage.setItem("mockUser", JSON.stringify(mockUser));
+      window.location.reload();
+    }
+  };
+
+  return (
+    <button
+      onClick={handleSwitch}
+      disabled={isCurrentUser}
+      className={`w-full text-left p-3 rounded-lg border-2 transition ${
+        isCurrentUser
+          ? "border-green-500 bg-green-50 cursor-default"
+          : "border-gray-200 bg-white hover:border-blue-500 hover:bg-blue-50 cursor-pointer"
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="font-medium text-gray-900">{name}</p>
+          <p className="text-xs text-gray-500">{email}</p>
+        </div>
+        {isCurrentUser && <span className="text-green-600 font-semibold">✓ Current</span>}
+      </div>
+    </button>
+  );
+}
+

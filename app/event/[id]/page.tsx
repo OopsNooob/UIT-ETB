@@ -1,13 +1,14 @@
 "use client";
 
-import { Id } from "@/convex/_generated/dataModel";
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+// Mock Id - no longer needed
+// import { Id } from "@/convex/_generated/dataModel";
+import { mockApi as api } from "@/lib/mockHooks";
+import { useQuery, useUser } from "@/lib/mockHooks";
 import { CalendarDays, MapPin, Ticket, Users } from "lucide-react";
 import { useParams } from "next/navigation";
 import Spinner from "@/components/Spinner";
 import JoinQueue from "@/components/JoinQueue";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton } from "@/lib/mockComponents";
 import { useStorageUrl } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,11 +16,12 @@ import { Button } from "@/components/ui/button";
 export default function EventPage() {
   const { user } = useUser();
   const params = useParams();
+  const eventId = params.id as string;
   const event = useQuery(api.events.getById, {
-    eventId: params.id as Id<"events">,
+    eventId,
   });
   const availability = useQuery(api.events.getEventAvailability, {
-    eventId: params.id as Id<"events">,
+    eventId,
   });
   const imageUrl = useStorageUrl(event?.imageStorageId);
 
@@ -121,7 +123,7 @@ export default function EventPage() {
                     
                     {user ? (
                       <JoinQueue
-                        eventId={params.id as Id<"events">}
+                        eventId={eventId}
                         userId={user.id}
                       />
                     ) : (

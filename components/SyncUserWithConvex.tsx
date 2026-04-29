@@ -1,39 +1,18 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { useEffect } from "react";
+import { mockUser } from "@/lib/mockData";
 
 export default function SyncUserWithConvex() {
-  const { user } = useUser();
-  const updateUser = useMutation(api.users.updateUser);
-
   useEffect(() => {
-    if (!user) return;
-
-    const syncUser = async () => {
-      try {
-        console.log("Syncing user:", {
-          userId: user.id,
-          email: user.primaryEmailAddress?.emailAddress,
-          name: user.fullName,
-        });
-
-        await updateUser({
-          userId: user.id,
-          email: user.primaryEmailAddress?.emailAddress ?? "",
-          name: user.fullName ?? user.firstName ?? "Anonymous",
-        });
-
-        console.log("✅ User synced successfully");
-      } catch (error) {
-        console.error("Failed to sync user:", error);
-      }
-    };
-
-    syncUser();
-  }, [user, updateUser]);
+    // Mock sync - just log to console
+    console.log("Mock: Syncing user with Convex:", {
+      userId: mockUser.id,
+      email: mockUser.email,
+      name: mockUser.fullName,
+    });
+    console.log("✅ Mock: User synced successfully");
+  }, []);
 
   return null;
 }
