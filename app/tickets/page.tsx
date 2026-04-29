@@ -132,7 +132,7 @@ export default function MyTicketsPage() {
   const router = useRouter();
   const ticketsData = useQuery(
     api.events.getUserTickets,
-    user ? { userId: user.id } : "skip"
+    user ? { userId: user.id, userEmail: user.email } : "skip"
   );
   const tickets = ticketsData || [];
   const updateExpiredTickets = useMutation(api.tickets.updateExpiredTicketsForUser);

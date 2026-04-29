@@ -28,10 +28,12 @@ export default function EventCard({ eventId }: { eventId: any }) {
   const userTicket = useQuery(api.tickets.getUserTicketForEvent, {
     eventId,
     userId: user?.id ?? "",
+    userEmail: user?.email ?? "",
   });
   const userTicketCount = useQuery(api.tickets.getUserTicketCountForEvent, {
     eventId,
     userId: user?.id ?? "",
+    userEmail: user?.email ?? "",
   });
   const queuePosition = useQuery(api.waitingList.getQueuePosition, {
     eventId,
@@ -45,7 +47,7 @@ export default function EventCard({ eventId }: { eventId: any }) {
 
   const isPastEvent = event.eventDate < Date.now();
 
-  const isEventOwner = user?.id === event?.userId;
+  const isEventOwner = user?.id === event?.organizerId || user?.email === event?.organizerId;
 
   const renderQueuePosition = () => {
     if (!queuePosition || queuePosition.status !== "waiting") return null;
@@ -112,7 +114,7 @@ export default function EventCard({ eventId }: { eventId: any }) {
       );
     }
 
-    if (userTicket && userTicketCount !== undefined) {
+    if (userTicket && userTicketCount !== undefined && userTicketCount > 0) {
       return (
         <div className="mt-4 flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
           <div className="flex items-center">

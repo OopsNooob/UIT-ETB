@@ -15,20 +15,20 @@ export default function MigrationPage() {
   const router = useRouter();
   const [isRunning, setIsRunning] = useState(false);
   
-  const status = useQuery(mockApi.migrations.checkUsersRoleStatus);
-  const usersWithEvents = useQuery(mockApi.migrations.getUsersWithEvents);
-  const conflictTickets = useQuery(mockApi.migrations.findConflictTickets);
-  const ticketsOverview = useQuery(mockApi.migrations.getTicketsOverview);
-  const purchasedWaitingList = useQuery(mockApi.migrations.checkPurchasedWaitingListEntries);
-  const oversoldEvents = useQuery(mockApi.migrations.checkOversoldEvents);
-  const orphanedPayments = useQuery(mockApi.migrations.checkOrphanedPayments);
+  const status = useQuery(api.migrations.checkUsersRoleStatus);
+  const usersWithEvents = useQuery(api.migrations.getUsersWithEvents);
+  const conflictTickets = useQuery(api.migrations.findConflictTickets);
+  const ticketsOverview = useQuery(api.migrations.getTicketsOverview);
+  const purchasedWaitingList = useQuery(api.migrations.checkPurchasedWaitingListEntries);
+  const oversoldEvents = useQuery(api.migrations.checkOversoldEvents);
+  const orphanedPayments = useQuery(api.migrations.checkOrphanedPayments);
   
-  const migrateRoles = useMutation(mockApi.migrations.migrateUserRoles);
-  const resetRoles = useMutation(mockApi.migrations.resetAllRolesToUser);
-  const deleteConflicts = useMutation(mockApi.migrations.deleteConflictTickets);
-  const expireWaitingList = useMutation(mockApi.migrations.expirePurchasedWaitingListEntries);
-  const deleteWaitingList = useMutation(mockApi.migrations.deletePurchasedWaitingListEntries);
-  const cleanupPayments = useMutation(mockApi.migrations.cleanupOrphanedPayments);
+  const migrateRoles = useMutation(api.migrations.migrateUserRoles);
+  const resetRoles = useMutation(api.migrations.resetAllRolesToUser);
+  const deleteConflicts = useMutation(api.migrations.deleteConflictTickets);
+  const expireWaitingList = useMutation(api.migrations.expirePurchasedWaitingListEntries);
+  const deleteWaitingList = useMutation(api.migrations.deletePurchasedWaitingListEntries);
+  const cleanupPayments = useMutation(api.migrations.cleanupOrphanedPayments);
 
   // Check admin access
   if (isLoaded && !user) {
@@ -83,8 +83,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await migrateRoles();
-      toast.success(result.message);
+      const result = await migrateRoles({});
+      toast.success(result.message || "Migration completed");
     } catch (error) {
       toast.error("Migration failed: " + error);
       console.error(error);
@@ -100,8 +100,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await resetRoles();
-      toast.success(result.message);
+      const result = await resetRoles({});
+      toast.success(result.message || "Reset completed");
     } catch (error) {
       toast.error("Reset failed: " + error);
       console.error(error);
@@ -122,8 +122,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await deleteConflicts();
-      toast.success(result.message);
+      const result = await deleteConflicts({});
+      toast.success(result.message || "Conflict tickets deleted");
     } catch (error) {
       toast.error("Delete failed: " + error);
       console.error(error);
@@ -144,8 +144,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await expireWaitingList();
-      toast.success(result.message);
+      const result = await expireWaitingList({});
+      toast.success(result.message || "Waiting list entries expired");
     } catch (error) {
       toast.error("Expire failed: " + error);
       console.error(error);
@@ -166,8 +166,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await deleteWaitingList();
-      toast.success(result.message);
+      const result = await deleteWaitingList({});
+      toast.success(result.message || "Waiting list entries deleted");
     } catch (error) {
       toast.error("Delete failed: " + error);
       console.error(error);
@@ -188,8 +188,8 @@ export default function MigrationPage() {
     
     setIsRunning(true);
     try {
-      const result = await cleanupPayments();
-      toast.success(result.message);
+      const result = await cleanupPayments({});
+      toast.success(result.message || "Payments cleaned up");
     } catch (error) {
       toast.error("Cleanup failed: " + error);
       console.error(error);
@@ -816,7 +816,7 @@ export default function MigrationPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {status.usersWithoutRole.map((user) => (
+                  {status.usersWithoutRole.map((user: any) => (
                     <tr key={user.userId}>
                       <td className="px-4 py-3 text-sm text-gray-900">{user.email}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">{user.name || "-"}</td>
@@ -858,7 +858,7 @@ export default function MigrationPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {usersWithEvents.map((user) => (
+                {usersWithEvents.map((user: any) => (
                   <tr key={user.userId}>
                     <td className="px-4 py-3 text-sm text-gray-900">{user.email}</td>
                     <td className="px-4 py-3 text-sm">
@@ -881,7 +881,7 @@ export default function MigrationPage() {
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-600">
                       <ul className="list-disc list-inside">
-                        {user.eventNames.slice(0, 3).map((name, idx) => (
+                        {user.eventNames.slice(0, 3).map((name: any, idx: any) => (
                           <li key={idx}>{name}</li>
                         ))}
                         {user.eventNames.length > 3 && (

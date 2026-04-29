@@ -5,20 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/images/logo.png";
 import SearchBar from "./SearchBar";
-import { useQuery, mockApi as api } from "@/lib/mockHooks";
 import { useUser } from "@/lib/mockHooks";
 import { Shield } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const ADMIN_EMAILS = ["dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com", "23520657@gm.uit.edu.vn"];
+const ORGANIZER_EMAILS = ["organizer@example.com", "dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com"];
 
 function Header() {
   const { user } = useUser();
-  const userRole = useQuery(
-    api.users.getUserRole,
-    user?.id ? { userId: user.id } : "skip"
-  );
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOrganizer, setIsOrganizer] = useState(false);
 
-  const isAdmin = ADMIN_EMAILS.includes(user?.primaryEmailAddress?.emailAddress || "");
+  useEffect(() => {
+    if (user?.email) {
+      setIsAdmin(ADMIN_EMAILS.includes(user.email));
+      setIsOrganizer(ORGANIZER_EMAILS.includes(user.email));
+    }
+  }, [user?.email]);
 
   return (
     <div className="border-b">
@@ -57,7 +61,7 @@ function Header() {
           <SignedIn>
             <div className="flex items-center gap-3">
               {/* Navigation dựa trên role */}
-              {userRole === "organizer" ? (
+              {isOrganizer ? (
                 <>
                   <Link href="/seller/dashboard">
                     <button className="bg-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-blue-700 transition">
@@ -116,7 +120,7 @@ function Header() {
         {/* Mobile Action Buttons */}
         <div className="lg:hidden w-full flex justify-center gap-2">
           <SignedIn>
-            {userRole === "organizer" ? (
+            {isOrganizer ? (
               <>
                 <Link href="/seller/dashboard" className="flex-1">
                   <button className="w-full bg-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-blue-700 transition">

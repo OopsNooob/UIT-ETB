@@ -22,7 +22,7 @@ export default function EventTicketsPage() {
 
   const tickets = useQuery(
     api.events.getUserTickets,
-    user ? { userId: user.id } : "skip"
+    user ? { userId: user.id, userEmail: user.email } : "skip"
   );
 
   const event = useQuery(

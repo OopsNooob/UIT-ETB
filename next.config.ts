@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
         hostname: "brilliant-chickadee-636.convex.cloud",
         pathname: "/api/storage/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.gravatar.com",
+      },
     ],
   },
 };
