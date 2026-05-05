@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"] // Bắt buộc để dùng Neon Serverless
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Bảng User để test luồng Auth đầu tiên
+enum Role {
+  admin
+  organizer
+  user
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  name          String
+  email         String    @unique
+  role          Role      @default(user)
+  password_hash String
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime? // Hỗ trợ Soft Delete (ADD ID 3)
+
+  @@index([email])
+}
