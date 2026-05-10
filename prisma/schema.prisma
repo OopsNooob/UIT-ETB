@@ -1,34 +1,255 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"] // Bắt buộc để dùng Neon Serverless
+  previewFeatures = ["driverAdapters"] 
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// Bảng User để test luồng Auth đầu tiên
+// =========================================
+// ENUMS
+// =========================================
 enum Role {
   admin
   organizer
   user
 }
 
+enum EventStatus {
+  draft
+  published
+  cancelled
+  completed
+}
+
+enum TicketStatus {
+  valid
+  used
+  cancelled
+  refunded
+}
+
+enum PurchaseStatus {
+  pending
+  completed
+  failed
+  refunded
+}
+
+enum GiftcodeType {
+  fixed_amount
+  percentage
+}
+
+enum GiftcodeStatus {
+  active
+  expired
+  depleted
+}
+
+enum WaitingListStatus {
+  waiting
+  offered
+  expired
+  purchased
+}
+
+// =========================================
+// CORE ENTITIES
+// =========================================
 model User {
   id            String    @id @default(uuid()) @db.Uuid
   name          String
   email         String    @unique
+  phone         String?
   role          Role      @default(user)
   password_hash String
   is_active     Boolean   @default(true)
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
-  deleted_at    DateTime? // Hỗ trợ Soft Delete (ADD ID 3)
+  deleted_at    DateTime? 
+
+  // --- Relationships ---
+  // Event
+  organized_events      Event[] @relation("EventOrganizer")
+  created_events        Event[] @relation("EventCreatedBy")
+  updated_events        Event[] @relation("EventUpdatedBy")
+  
+  // Ticket Type & Giftcode (Tracking creator/updater)
+  created_ticket_types  TicketType[] @relation("TicketTypeCreatedBy")
+  updated_ticket_types  TicketType[] @relation("TicketTypeUpdatedBy")
+  created_giftcodes     Giftcode[]   @relation("GiftcodeCreatedBy")
+  updated_giftcodes     Giftcode[]   @relation("GiftcodeUpdatedBy")
+
+  // Business Flows
+  purchases             Purchase[]
+  tickets               Ticket[]
+  waiting_lists         WaitingList[]
+  audit_logs            AuditLog[]
+  giftcode_redemptions  GiftcodeRedemption[]
 
   @@index([email])
 }
+
+model Event {
+  id                 String      @id @default(uuid()) @db.Uuid
+  organizer_id       String      @db.Uuid
+  title              String
+  description        String      @db.Text
+  location           String
+  banner_url         String?
+  start_date         DateTime
+  end_date           DateTime
+  total_capacity     Int
+  remaining_capacity Int
+  status             EventStatus @default(draft)
+  created_by         String      @db.Uuid
+  updated_by         String?     @db.Uuid
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  deleted_at         DateTime?
+
+  // --- Relationships ---
+  organizer          User        @relation("EventOrganizer", fields: [organizer_id], references: [id])
+  creator            User        @relation("EventCreatedBy", fields: [created_by], references: [id])
+  updater            User?       @relation("EventUpdatedBy", fields: [updated_by], references: [id])
+
+  ticket_types       TicketType[]
+  purchases          Purchase[]
+  tickets            Ticket[]
+  giftcodes          Giftcode[]
+  waiting_lists      WaitingList[]
+}
+
+// =========================================
+// TICKET INVENTORY & SALES
+// =========================================
+model TicketType {
+  id             String    @id @default(uuid()) @db.Uuid
+  event_id       String    @db.Uuid
+  name           String
+  description    String    @db.Text
+  price          Decimal   @db.Decimal(10, 2)
+  total_quantity Int
+  sold_quantity  Int       @default(0)
+  sale_start     DateTime
+  sale_end       DateTime
+  created_by     String    @db.Uuid
+  updated_by     String?   @db.Uuid
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
+
+  event          Event     @relation(fields: [event_id], references: [id])
+  creator        User      @relation("TicketTypeCreatedBy", fields: [created_by], references: [id])
+  updater        User?     @relation("TicketTypeUpdatedBy", fields: [updated_by], references: [id])
+  tickets        Ticket[]
+}
+
+model Purchase {
+  id                     String         @id @default(uuid()) @db.Uuid
+  user_id                String         @db.Uuid
+  event_id               String         @db.Uuid
+  gateway_transaction_id String?        @db.VarChar
+  total_amount           Decimal        @db.Decimal(10, 2)
+  discount_amount        Decimal        @db.Decimal(10, 2) @default(0)
+  final_amount           Decimal        @db.Decimal(10, 2)
+  status                 PurchaseStatus @default(pending)
+  created_at             DateTime       @default(now())
+  updated_at             DateTime       @updatedAt
+  deleted_at             DateTime?
+
+  user                   User           @relation(fields: [user_id], references: [id])
+  event                  Event          @relation(fields: [event_id], references: [id])
+  tickets                Ticket[]
+  giftcode_redemption    GiftcodeRedemption? 
+}
+
+model Ticket {
+  id             String       @id @default(uuid()) @db.Uuid
+  purchase_id    String?      @db.Uuid 
+  event_id       String       @db.Uuid
+  ticket_type_id String       @db.Uuid
+  user_id        String       @db.Uuid
+  ticket_code    String       @unique @db.VarChar
+  status         TicketStatus @default(valid)
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+  deleted_at     DateTime?
+
+  purchase       Purchase?    @relation(fields: [purchase_id], references: [id])
+  event          Event        @relation(fields: [event_id], references: [id])
+  ticket_type    TicketType   @relation(fields: [ticket_type_id], references: [id])
+  user           User         @relation(fields: [user_id], references: [id])
+}
+
+// =========================================
+// PROMOTIONS & QUEUES
+// =========================================
+model Giftcode {
+  id             String         @id @default(uuid()) @db.Uuid
+  code           String         @unique @db.VarChar
+  type           GiftcodeType
+  discount_value Decimal        @db.Decimal(10, 2)
+  event_id       String?        @db.Uuid 
+  usage_limit    Int
+  used_count     Int            @default(0)
+  expired_date   DateTime
+  status         GiftcodeStatus @default(active)
+  created_by     String         @db.Uuid
+  updated_by     String?        @db.Uuid
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  deleted_at     DateTime?
+
+  event          Event?         @relation(fields: [event_id], references: [id])
+  creator        User           @relation("GiftcodeCreatedBy", fields: [created_by], references: [id])
+  updater        User?          @relation("GiftcodeUpdatedBy", fields: [updated_by], references: [id])
+  redemptions    GiftcodeRedemption[]
+}
+
+model GiftcodeRedemption {
+  id             String   @id @default(uuid()) @db.Uuid
+  giftcode_id    String   @db.Uuid
+  user_id        String   @db.Uuid
+  purchase_id    String   @db.Uuid @unique 
+  created_at     DateTime @default(now())
+
+  giftcode       Giftcode @relation(fields: [giftcode_id], references: [id])
+  user           User     @relation(fields: [user_id], references: [id])
+  purchase       Purchase @relation(fields: [purchase_id], references: [id])
+}
+
+model WaitingList {
+  id               String            @id @default(uuid()) @db.Uuid
+  user_id          String            @db.Uuid
+  event_id         String            @db.Uuid
+  status           WaitingListStatus @default(waiting)
+  offer_expires_at DateTime?
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
+  deleted_at       DateTime?
+
+  user             User              @relation(fields: [user_id], references: [id])
+  event            Event             @relation(fields: [event_id], references: [id])
+}
+
+// =========================================
+// SECURITY & AUDITING
+// =========================================
+model AuditLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  user_id        String?  @db.Uuid // Nullable vì có thể log thao tác chưa đăng nhập
+  event_code     String   @db.VarChar(10)
+  severity_level String   @db.VarChar
+  action         String   @db.VarChar
+  target_entity  String   @db.VarChar
+  target_id      String?  @db.VarChar
+  ip_address     String   @db.VarChar
+  details        Json
+  created_at     DateTime @default(now())
+
+  user           User?    @relation(fields: [user_id], references: [id])
+}
+
