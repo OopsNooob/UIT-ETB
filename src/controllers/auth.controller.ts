@@ -11,7 +11,6 @@ export class AuthController {
     try {
       const body = await req.json();
 
-      // Gọi xuống tầng Service
       const user = await this.authService.registerUser(body);
 
       return Response.json(
@@ -23,7 +22,6 @@ export class AuthController {
         { status: 201 },
       );
     } catch (error: any) {
-      // Bắt lỗi và trả về chuẩn JSON (Exception Masking - ADD ID 67)
       return Response.json(
         {
           success: false,

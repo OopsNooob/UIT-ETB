@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import ws from "ws";
+import { startHealthMonitor } from "../workers/health.cron";
 
 neonConfig.webSocketConstructor = ws;
 
@@ -14,3 +15,5 @@ const adapter = new PrismaNeon(pool);
 export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+startHealthMonitor(prisma);

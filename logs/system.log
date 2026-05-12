@@ -1,0 +1,5 @@
+[2026-05-11 23:41:18] [INFO] [STARTUP] Next.js server initializing - instrumentation hook triggered
+[2026-05-11 23:41:18] [INFO] [STARTUP] Database connection and health monitor ready
+[2026-05-11 23:48:46] [INFO] Health Monitor Cron Job started...
+[2026-05-11 23:48:46] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-11 23:48:46] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health

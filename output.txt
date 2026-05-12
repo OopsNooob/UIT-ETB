@@ -1,0 +1,15 @@
+﻿
+> ticketing-saas-convex-clerk@0.1.0 dev
+> next dev --turbopack
+
+   Γû▓ Next.js 15.5.15 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.105:3000
+   - Environments: .env
+
+ Γ£ô Starting...
+ Γ£ô Compiled middleware in 383ms
+ Γ£ô Ready in 3.1s
+ Γ£ô Compiled instrumentation Node.js in 58ms
+ Γ£ô Compiled instrumentation Edge in 32ms
+ Γ£ô Compiled middleware in 14ms
