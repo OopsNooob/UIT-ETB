@@ -1,10 +1,3 @@
-export const SeverityLevel = {
-  INFO: "INFO",
-  WARN: "WARN",
-  ERROR: "ERROR",
-  CRITICAL: "CRITICAL",
-} as const;
-
 export const AuditEvent = {
   SECURITY: {
     UNAUTHORIZED_ACCESS_ATTEMPT: {
@@ -113,28 +106,44 @@ export const AuditEvent = {
   },
 
   SYSTEM: {
-    BACKGROUND_WORKER_EXECUTED: {
+    DB_WORKING: {
+      code: "SYS-000",
+      description: "DB is working.",
+    },
+    DB_NOT_WORKING: {
       code: "SYS-001",
+      description: "DB is down.",
+    },
+    REDIS_CLUSTER_WORKING: {
+      code: "SYS-002",
+      description: "Redis cluster is working.",
+    },
+    REDIS_CLUSTER_NOT_WORKING: {
+      code: "SYS-003",
+      description: "Redis cluster is down.",
+    },
+    BACKGROUND_WORKER_EXECUTED: {
+      code: "SYS-004",
       description:
         "RabbitMQ Background Worker executed: Expired giftcodes/offers successfully cleaned up.",
     },
     NOTIFICATION_DISPATCHED: {
-      code: "SYS-002",
+      code: "SYS-005",
       description:
         "RabbitMQ Worker: Notification email containing QR ticket successfully dispatched.",
     },
     UNHANDLED_ERROR: {
-      code: "SYS-003",
+      code: "SYS-006",
       description:
         "Global Exception Handler triggered: Unhandled server error caught, masked, and logged.",
     },
     DB_CONNECTION_STATUS_CHANGED: {
-      code: "SYS-004",
+      code: "SYS-007",
       description:
-        "Connection lost or successfully reconnected to PostgreSQL Database / Redis Cluster.",
+        "Connection successfully reconnected to PostgreSQL Database.",
     },
     THIRD_PARTY_API_FAILURE: {
-      code: "SYS-005",
+      code: "SYS-008",
       description:
         "Third-party API timeout/failure detected (e.g., SMTP Provider unresponsive).",
     },

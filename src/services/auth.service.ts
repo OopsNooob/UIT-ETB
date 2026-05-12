@@ -13,7 +13,7 @@ export class AuthService {
 
     const existingUser = await this.userRepo.findByEmail(email);
     if (existingUser) {
-      throw new Error("Email đã được sử dụng trong hệ thống.");
+      throw new Error("Email is already registered in the system.");
     }
 
     const saltRounds = 10;

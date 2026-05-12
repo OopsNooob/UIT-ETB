@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { systemLogger } from "../utils/logger.util";
+import { AuditEvent } from "../helper/audit-log.constants";
 
 declare global {
   var isDbHealthy: boolean | undefined;
@@ -23,15 +24,19 @@ export const startHealthMonitor = (prisma: PrismaClient) => {
       await prisma.$queryRaw`SELECT 1`;
 
       if (!globalThis.isDbHealthy) {
-        systemLogger.info(
-          "SYS-000: System recovered. PostgreSQL connection restored.",
-        );
+        const recoveryLog = AuditEvent.SYSTEM.DB_CONNECTION_STATUS_CHANGED;
+        systemLogger.info(`${recoveryLog.code}: ${recoveryLog.description}`);
         globalThis.isDbHealthy = true;
+        return;
       }
+
+      const healthyLog = AuditEvent.SYSTEM.DB_WORKING;
+      systemLogger.info(`${healthyLog.code}: ${healthyLog.description}`);
     } catch (error: any) {
       globalThis.isDbHealthy = false;
+      const dbFailureLog = AuditEvent.SYSTEM.DB_NOT_WORKING;
       systemLogger.error(
-        `SYS-004: Cannot connect to PostgreSQL. Fail-fast activated! Details: ${error.message}`,
+        `${dbFailureLog.code}: ${dbFailureLog.description} Details: ${error.message}`,
       );
     }
   }, 60000);

@@ -1,34 +1,31 @@
+import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 
-export class AuthController {
+class AuthControllerClass {
   private authService: AuthService;
 
   constructor() {
     this.authService = new AuthService();
   }
 
-  async register(req: Request) {
+  register = async (req: Request, res: Response) => {
     try {
-      const body = await req.json();
+      const body = req.body;
 
       const user = await this.authService.registerUser(body);
 
-      return Response.json(
-        {
-          success: true,
-          message: "Đăng ký thành công",
-          data: user,
-        },
-        { status: 201 },
-      );
+      return res.status(201).json({
+        success: true,
+        message: "Registration successful",
+        data: user,
+      });
     } catch (error: any) {
-      return Response.json(
-        {
-          success: false,
-          message: error.message || "Lỗi máy chủ nội bộ",
-        },
-        { status: 400 },
-      );
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
     }
-  }
+  };
 }
+
+export const AuthController = new AuthControllerClass();
