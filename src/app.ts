@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { withHealthGuard } from "./middlewares/health.guard";
 import { withErrorHandler } from "./middlewares/exception.handler";
 import authRoute from "./routes/auth.routes";
+import loggingRoute from "./routes/logging.route";
 
 const app = express();
 
@@ -24,6 +25,9 @@ app.get("/api/v1/health", (req, res) => {
 
 // Auth
 app.use("/api/v1/auth", authRoute);
+
+// Logging
+app.use("/api/v1/logs", loggingRoute);
 
 app.use(withErrorHandler);
 
