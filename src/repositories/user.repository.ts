@@ -8,6 +8,15 @@ export class UserRepository {
     });
   }
 
+  async findById(id: string) {
+    return await prisma.user.findUnique({
+      where: { id, deleted_at: null },
+      omit: {
+        password_hash: true,
+      },
+    });
+  }
+
   async createUser(data: Prisma.UserCreateInput) {
     return await prisma.user.create({
       data,

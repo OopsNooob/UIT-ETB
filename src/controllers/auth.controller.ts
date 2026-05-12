@@ -16,8 +16,63 @@ class AuthControllerClass {
 
       return res.status(201).json({
         success: true,
-        message: "Registration successful",
-        data: user,
+        user,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  };
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const body = req.body;
+
+      const result = await this.authService.loginUser(body);
+
+      return res.status(200).json({
+        success: true,
+        user: result.user,
+        token: result.token,
+        message: result.message,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  };
+
+  logout = async (req: Request, res: Response) => {
+    try {
+      const authUser: any = (res.locals && res.locals.authUser) || null;
+      const userId = authUser?.id;
+      const result = await this.authService.logout(userId);
+
+      return res.status(200).json({
+        success: true,
+        ...result,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  };
+
+  getProfile = async (req: Request, res: Response) => {
+    try {
+      const authUser: any = (res.locals && res.locals.authUser) || null;
+      const userId = authUser?.id;
+      const result = await this.authService.getProfile(userId);
+
+      return res.status(200).json({
+        success: true,
+        user: result.user,
       });
     } catch (error: any) {
       return res.status(400).json({

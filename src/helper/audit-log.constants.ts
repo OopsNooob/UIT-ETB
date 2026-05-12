@@ -147,5 +147,9 @@ export const AuditEvent = {
       description:
         "Third-party API timeout/failure detected (e.g., SMTP Provider unresponsive).",
     },
+    LOG_BROKEN: {
+      code: "SYS-009",
+      description: "Log can't be written into DB.",
+    },
   },
 } as const;

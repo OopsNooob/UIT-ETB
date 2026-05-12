@@ -1,20 +1,13 @@
 import { prisma } from "../config/db.connection";
+import { AuditLogPayload } from "../types/audit-log-payload";
+import { systemLogger } from "../utils/logger.util";
+import { AuditEvent } from "../helper/audit-log.constants";
 
-interface AuditLogPayload {
-  userId?: string;
-  eventCode: string;
-  severityLevel: string;
-  action: string;
-  targetEntity: string;
-  targetId?: string;
-  ipAddress: string;
-  details: any;
-}
-
+// Logging
 export class AuditService {
-  static async log(payload: AuditLogPayload) {
+  static log(payload: AuditLogPayload) {
     try {
-      await prisma.auditLog.create({
+      prisma.auditLog.create({
         data: {
           user_id: payload.userId || null,
           event_code: payload.eventCode,
@@ -28,6 +21,10 @@ export class AuditService {
       });
     } catch (error) {
       console.error("Failed to save log to DB:", error);
+      const logError = AuditEvent.SYSTEM.LOG_BROKEN;
+      systemLogger.error(
+        `${logError.code}: ${logError.description} Details: ${error}`,
+      );
     }
   }
 }
