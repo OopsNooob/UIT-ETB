@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "dev:next": "next dev --turbopack",
+    "dev:next": "next dev --turbopack -p 3001",
     "build": "next build",
     "start": "next start",
     "start:be": "ts-node --project tsconfig.server.json -r dotenv/config -r tsconfig-paths/register src/server.ts",
