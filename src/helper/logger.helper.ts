@@ -1,4 +1,5 @@
 import { Request } from "express";
+import requestIp from "request-ip";
 import { AuditLogPayload } from "../types/audit-log-payload";
 import { dbLogger } from "../utils/logger.util";
 
@@ -7,6 +8,13 @@ export type AuditEventObject = {
   description: string;
 };
 
+function normalizeIp(ip?: string | null): string {
+  if (!ip) return "";
+  if (ip.startsWith("::ffff:")) return ip.split("::ffff:")[1];
+  if (ip === "::1") return "127.0.0.1";
+  return ip;
+}
+
 export class LoggerHelper {
   static createLogPayload(
     req: Request,
@@ -14,8 +22,7 @@ export class LoggerHelper {
     userId?: string,
     overrides?: Partial<AuditLogPayload>,
   ): AuditLogPayload {
-    const ipAddress = req.clientIp || req.ip || "";
-
+    const ipAddress = normalizeIp(requestIp.getClientIp(req) || req.clientIp || req.ip);
     const log = {
       userId: userId || undefined,
       eventCode: auditEvent.code,
@@ -40,6 +47,8 @@ export class LoggerHelper {
     targetEntity?: string,
     targetId?: string,
   ): AuditLogPayload {
+    const ip = normalizeIp(requestIp.getClientIp(req) || req.clientIp || req.ip);
+
     const log = {
       userId: userId || undefined,
       eventCode,
@@ -47,7 +56,7 @@ export class LoggerHelper {
       action: "Business Event",
       targetEntity: targetEntity || "Event",
       targetId: targetId || undefined,
-      ipAddress: req.clientIp || req.ip || "",
+      ipAddress: ip,
       details: description,
     };
     dbLogger.debug(log);

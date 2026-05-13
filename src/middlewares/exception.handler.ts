@@ -7,9 +7,10 @@ export const withErrorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  systemLogger.error(
-    `Unhandled Exception: ${error.message}\nStack: ${error.stack}`,
-  );
+  const message = error instanceof Error ? error.message : String(error);
+  const stack = error instanceof Error ? error.stack : undefined;
+
+  systemLogger.error(`Unhandled Exception: ${message}\nStack: ${stack}`);
 
   return res.status(500).json({
     success: false,

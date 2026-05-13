@@ -9,9 +9,20 @@ import loggingRoute from "./routes/logging.route";
 import requestIp from "request-ip";
 
 const app = express();
+app.set("trust proxy", true);
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3001")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(requestIp.mw());

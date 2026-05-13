@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { LoggingService } from "../services/logging.service";
 class LoggingControllerClass {
   private loggingService: LoggingService;
@@ -7,7 +7,7 @@ class LoggingControllerClass {
     this.loggingService = new LoggingService();
   }
 
-  createLog = async (req: Request, res: Response) => {
+  createLog = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
 
@@ -18,14 +18,11 @@ class LoggingControllerClass {
         data: result,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 
-  getLogs = async (req: Request, res: Response) => {
+  getLogs = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const logs = await this.loggingService.getLogsService();
 
@@ -34,10 +31,7 @@ class LoggingControllerClass {
         data: logs,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 }

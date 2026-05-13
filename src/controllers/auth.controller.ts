@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthService } from "../services/auth.service";
 import { SafeLoggingService } from "../services/safe-logging.service";
 import { LoggerHelper } from "../helper/logger.helper";
@@ -13,7 +13,7 @@ class AuthControllerClass {
     this.loggingService = new SafeLoggingService();
   }
 
-  register = async (req: Request, res: Response) => {
+  register = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
 
@@ -31,14 +31,11 @@ class AuthControllerClass {
         user,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 
-  login = async (req: Request, res: Response) => {
+  login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
 
@@ -60,14 +57,11 @@ class AuthControllerClass {
         message: result.message,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 
-  logout = async (req: Request, res: Response) => {
+  logout = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authUser: any = (res.locals && res.locals.authUser) || null;
       const userId = authUser?.id;
@@ -78,14 +72,11 @@ class AuthControllerClass {
         ...result,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 
-  getProfile = async (req: Request, res: Response) => {
+  getProfile = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authUser: any = (res.locals && res.locals.authUser) || null;
       const userId = authUser?.id;
@@ -96,10 +87,7 @@ class AuthControllerClass {
         user: result.user,
       });
     } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   };
 }
