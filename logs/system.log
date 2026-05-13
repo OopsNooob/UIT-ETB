@@ -268,3 +268,39 @@ Stack: TypeError: Cannot read properties of null (reading 'doSomethingCrazy')
 [2026-05-13 15:39:15] [INFO] SYS-000: DB is working.
 [2026-05-13 15:40:15] [INFO] SYS-000: DB is working.
 [2026-05-13 15:41:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:42:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:43:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:44:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:45:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:46:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:47:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:48:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:49:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:50:14] [INFO] SYS-000: DB is working.
+[2026-05-13 15:51:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:52:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:53:15] [INFO] SYS-000: DB is working.
+[2026-05-13 15:54:15] [INFO] SYS-000: DB is working.
+[2026-05-13 16:04:47] [ERROR] SYS-001: DB is down. Details: getaddrinfo ENOTFOUND ep-hidden-fire-aneapuc3-pooler.c-6.us-east-1.aws.neon.tech
+[2026-05-13 16:05:41] [INFO] Health Monitor Cron Job started...
+[2026-05-13 16:05:41] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-13 16:05:41] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-13 16:06:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:07:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:08:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:09:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:18:41] [INFO] Health Monitor Cron Job started...
+[2026-05-13 16:18:42] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-13 16:18:42] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-13 16:19:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:20:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:21:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:22:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:23:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:24:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:25:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:26:42] [INFO] SYS-000: DB is working.
+[2026-05-13 16:27:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:28:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:29:43] [INFO] SYS-000: DB is working.
+[2026-05-13 16:30:43] [INFO] SYS-000: DB is working.

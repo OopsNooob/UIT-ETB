@@ -70,4 +70,8 @@ export const MessageCode = {
     code: "MSG-015",
     description: "Account’s creation accepted",
   },
+  MSG_16: {
+    code: "MSG-016",
+    description: "Only organizers and admin can adjust events",
+  },
 } as const;

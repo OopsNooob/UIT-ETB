@@ -1,0 +1,46 @@
+,Method,Endpoint,Quyền (Role),Mô tả (Description)
+Auth,,,,
+,POST,/api/auth/register,Public,Đăng ký tài khoản (User/Organizer). Trả về JWT.
+,POST,/api/auth/login,Public,"Đăng nhập. So khớp Bcrypt, set JWT vào HttpOnly Cookie."
+,POST,/api/auth/logout,Authenticated,"Đăng xuất. Xóa Cookie, đưa token vào Redis Blacklist."
+,POST,/api/auth/refresh,Authenticated,Cấp lại Access Token mới dựa trên Refresh Token.
+,POST,/api/auth/forgot-password,Public,Gửi email chứa link/OTP reset mật khẩu (ASR ID 48).
+,POST,/api/auth/reset-password,Public,Đặt lại mật khẩu mới dựa trên Token hợp lệ.
+User,,,,
+,GET,/api/users/me,Authenticated,Lấy thông tin profile của user đang đăng nhập.
+,PUT,/api/users/me,Authenticated,"Cập nhật profile (name, phone...). Dùng Partial Update."
+,DELETE,/api/users/me,Authenticated,Xóa tài khoản (Kích hoạt Soft Delete: deleted_at).
+Events,,,,
+,GET,/api/events,Public,"Lấy danh sách sự kiện. Hỗ trợ Pagination, Search, Lọc (Redis Cache)."
+,GET,/api/events/:id,Public,Xem chi tiết 1 sự kiện và các loại vé (Ticket Types) của nó.
+,POST,/api/events,Organizer,Tạo sự kiện mới (status: draft). Gán organizer_id từ JWT.
+,PUT,/api/events/:id,Organizer,Cập nhật thông tin sự kiện (Chỉ chủ sở hữu mới được sửa).
+,DELETE,/api/events/:id,Organizer,Hủy/Xóa sự kiện (Soft Delete). Chặn xóa nếu đã có người mua vé.
+,,,,
+,POST,/api/events/:eventId/ticket-types,Organizer,"Thêm loại vé (VIP, Standard) vào một sự kiện."
+,PUT,/api/ticket-types/:id,Organizer,"Chỉnh sửa giá, số lượng (Chỉ được tăng tổng số lượng, không giảm quá số vé đã bán)."
+,DELETE,/api/ticket-types/:id,Organizer,Xóa loại vé (Chỉ áp dụng khi sold_quantity == 0).
+,,,,
+,POST,/api/checkout/intent,User,"Khởi tạo giao dịch. Giữ chỗ vé (SELECT FOR UPDATE), check Giftcode, tạo Stripe Session."
+,POST,/api/webhooks/stripe,System,Stripe gọi về để báo thanh toán thành công/thất bại. Kích hoạt RabbitMQ gửi email QR.
+,GET,/api/purchases/me,User,Lịch sử mua vé của User.
+,POST,/api/purchases/:id/refund,User/Org,Yêu cầu hoàn tiền. Cập nhật status và trả vé lại kho.
+,,,,
+,GET,/api/tickets/me,User,Lấy danh sách các vé điện tử (QR) mà user đang sở hữu.
+,GET,/api/tickets/:id,User,Xem chi tiết 1 vé QR cụ thể.
+,POST,/api/tickets/:ticketCode/check-in,Organizer,Quét mã QR tại cổng. Chuyển status vé từ valid sang used.
+Waiting list,,,,
+,POST,/api/events/:id/waiting-list,User,"Tham gia hàng đợi khi sự kiện ""Cháy vé"" (Đẩy vào Redis ZSET)."
+,DELETE,/api/events/:id/waiting-list,User,Rời khỏi hàng đợi.
+,GET,/api/events/:id/waiting-list/status,User,Lấy vị trí hiện tại trong hàng đợi (Truy vấn tốc độ cao từ Redis).
+Giftcode,,,,
+,POST,/api/giftcodes/validate,User,Kiểm tra mã giảm giá trước khi thanh toán (Tính toán số tiền giảm).
+,GET,/api/seller/giftcodes,Organizer,Lấy danh sách mã giảm giá do Organizer tạo.
+,POST,/api/seller/giftcodes,Organizer,Tạo mã giảm giá mới (Áp dụng cho 1 sự kiện cụ thể).
+,PUT,/api/seller/giftcodes/:id,Organizer,Vô hiệu hóa (Deactivate) mã giảm giá.
+Auth,,,,
+,GET,/api/seller/dashboard,Organizer,"Lấy số liệu thống kê (Số vé bán, doanh thu tổng) cho Dashboard."
+,GET,/api/seller/events/:id/attendees,Organizer,Lấy danh sách khách hàng đã mua vé của 1 sự kiện để xuất CSV.
+,GET,/api/admin/users,Admin,Lấy danh sách toàn bộ User/Organizer (Có Pagination).
+,PUT,/api/admin/users/:id/role,Admin,Đổi Role của user (Ban/Unban/Phân quyền).
+,GET,/api/admin/audit-logs,Admin,Xem nhật ký hệ thống (Audit Trail - ADD ID 66).

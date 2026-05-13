@@ -107,6 +107,14 @@ export const AuditEvent = {
       description:
         "Ticket check-in failed (Invalid, expired, or already used QR code).",
     },
+    TICKET_TYPE_CREATED_SUCCESSFULLY: {
+      code: "BUS-015",
+      description: "Ticket type is created successfully.",
+    },
+    EVENT_UPDATED_SUCCESSFULLY: {
+      code: "BUS-016",
+      description: "Event is updated successfully.",
+    },
   },
 
   SYSTEM: {

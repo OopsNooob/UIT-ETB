@@ -6,6 +6,8 @@ import { withHealthGuard } from "./middlewares/health.guard";
 import { withErrorHandler } from "./middlewares/exception.handler";
 import authRoute from "./routes/auth.routes";
 import loggingRoute from "./routes/logging.route";
+import eventRoutes from "./routes/event.routes";
+import ticketRoutes from "./routes/ticket.routes";
 import requestIp from "request-ip";
 
 const app = express();
@@ -41,6 +43,12 @@ app.use("/api/v1/auth", authRoute);
 
 // Logging
 app.use("/api/v1/logs", loggingRoute);
+
+// Events
+app.use("/api/v1/events", eventRoutes);
+
+// Ticket Types
+app.use("/api/v1/tickets", ticketRoutes);
 
 app.get("/api/test-crash", (req, res, next) => {
   try {
