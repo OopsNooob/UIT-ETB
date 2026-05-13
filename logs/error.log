@@ -1,0 +1,22 @@
+[2026-05-13 14:52:07] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-13 14:53:07] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-13 14:56:16] [ERROR] Unhandled Exception: Cannot read properties of null (reading 'doSomethingCrazy')
+Stack: TypeError: Cannot read properties of null (reading 'doSomethingCrazy')
+    at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\app.ts:48:16
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:117:3)
+    at handle (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:295:15
+    at processParams (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:582:12)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:291:5)
+    at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\request-ip\lib\index.js:139:5

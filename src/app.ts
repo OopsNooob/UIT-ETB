@@ -42,6 +42,15 @@ app.use("/api/v1/auth", authRoute);
 // Logging
 app.use("/api/v1/logs", loggingRoute);
 
+app.get("/api/test-crash", (req, res, next) => {
+  try {
+    const fakeObject: any = null;
+    fakeObject.doSomethingCrazy();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use(withErrorHandler);
 
 export default app;
