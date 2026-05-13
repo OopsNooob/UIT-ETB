@@ -1,23 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 export default function SignInCatchAll() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Mock sign in:', { email, password });
-    alert('Welcome! (Demo mode - no actual authentication)');
-    window.location.href = '/';
+    clearError();
+    
+    const result = await login({ email, password });
+    if (result.success) {
+      router.push('/');
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Sign In (Demo)</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
+        
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -27,8 +46,9 @@ export default function SignInCatchAll() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="demo@example.com"
+              placeholder="your@email.com"
               required
+              disabled={isLoading}
             />
           </div>
           
@@ -39,16 +59,18 @@ export default function SignInCatchAll() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Any password"
+              placeholder="Enter your password"
               required
+              disabled={isLoading}
             />
           </div>
           
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium"
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Sign In
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
         
@@ -58,12 +80,6 @@ export default function SignInCatchAll() {
             <Link href="/sign-up" className="text-blue-600 hover:underline">
               Sign up
             </Link>
-          </p>
-        </div>
-        
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
-            <strong>Demo Mode:</strong> Enter any email and password to continue.
           </p>
         </div>
       </div>

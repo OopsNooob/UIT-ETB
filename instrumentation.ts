@@ -1,8 +1,10 @@
+export const runtime = "nodejs";
+
 import { prisma } from "./src/config/db.connection";
-import { systemLogger } from "./src/utils/logger.util";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    const { systemLogger } = await import("./src/utils/logger.util");
     systemLogger.info(
       "[STARTUP] Next.js server initializing - instrumentation hook triggered",
     );
