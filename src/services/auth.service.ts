@@ -2,6 +2,7 @@ import { UserRepository } from "../repositories/user.repository";
 import bcrypt from "bcrypt";
 import { MessageCode } from "../helper/message.constants";
 import jwt from "jsonwebtoken";
+import { AppError } from "../utils/app-error";
 export class AuthService {
   private userRepo: UserRepository;
 
@@ -21,7 +22,7 @@ export class AuthService {
 
     const existingUser = await this.userRepo.findByEmail(email);
     if (existingUser) {
-      throw new Error(`${MessageCode.MSG_0.description}`);
+      throw new AppError(`${MessageCode.MSG_0.description}`, 409);
     }
 
     const saltRounds = 10;
@@ -44,12 +45,12 @@ export class AuthService {
 
     const user = await this.userRepo.findByEmail(email);
     if (!user) {
-      throw new Error(`${MessageCode.MSG_2.description}`);
+      throw new AppError(`${MessageCode.MSG_2.description}`, 401);
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
-      throw new Error(`${MessageCode.MSG_2.description}`);
+      throw new AppError(`${MessageCode.MSG_2.description}`, 401);
     }
 
     // if (user.status === "banned") {
@@ -84,7 +85,7 @@ export class AuthService {
     const user = await this.userRepo.findById(userId);
 
     if (!user) {
-      throw new Error(`${MessageCode.MSG_12.description}`);
+      throw new AppError(`${MessageCode.MSG_12.description}`, 404);
     }
 
     return {

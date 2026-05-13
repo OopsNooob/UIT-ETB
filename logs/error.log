@@ -21,3 +21,28 @@ Stack: TypeError: Cannot read properties of null (reading 'doSomethingCrazy')
     at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:291:5)
     at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\request-ip\lib\index.js:139:5
 [2026-05-13 16:04:47] [ERROR] SYS-001: DB is down. Details: getaddrinfo ENOTFOUND ep-hidden-fire-aneapuc3-pooler.c-6.us-east-1.aws.neon.tech
+[2026-05-13 22:52:02] [ERROR] Unhandled Exception: Validation error: title, description, and location are required
+Stack: Error: Validation error: title, description, and location are required
+    at EventService.createEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:47:13)
+    at EventControllerClass.createEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:19:46)
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:157:13)
+    at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\middlewares\auth.middleware.ts:33:12
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:117:3)
+    at handle (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+[2026-05-13 22:55:42] [ERROR] Unhandled Exception: Unauthorized: You can only update your own events
+Stack: Error: Unauthorized: You can only update your own events
+    at EventService.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:121:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async EventControllerClass.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:47:22)
+[2026-05-13 23:23:29] [ERROR] Unhandled Exception: Unauthorized: You can only update your own events
+Stack: AppError: Unauthorized: You can only update your own events
+    at EventService.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:116:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async EventControllerClass.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:47:22)
+{"level":"error","message":"Unhandled Exception: \nInvalid `prisma.user.findUnique()` invocation:\n\n\nInvalid URL\nStack: PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation:\n\n\nInvalid URL\n    at zr.handleRequestError (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\node_modules\\@prisma\\client\\src\\runtime\\RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\node_modules\\@prisma\\client\\src\\runtime\\RequestHandler.ts:183:12)\n    at zr.request (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\node_modules\\@prisma\\client\\src\\runtime\\RequestHandler.ts:152:12)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\node_modules\\@prisma\\client\\src\\runtime\\getPrismaClient.ts:963:24)\n    at async UserRepository.findByEmail (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\src\\repositories\\user.repository.ts:6:12)\n    at async AuthService.loginUser (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\src\\services\\auth.service.ts:46:18)\n    at async AuthControllerClass.login (D:\\UIT\\3rd_year\\HK4\\KTPM\\DoAn\\UIT-ETB\\src\\controllers\\auth.controller.ts:42:22)"}
+{"level":"error","message":"SYS-001: DB is down. Details: \nInvalid `prisma.$queryRaw()` invocation:\n\n\nInvalid URL"}
+{"level":"error","message":"SYS-001: DB is down. Details: \nInvalid `prisma.$queryRaw()` invocation:\n\n\nInvalid URL"}

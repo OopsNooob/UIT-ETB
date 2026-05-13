@@ -48,8 +48,6 @@ class AuthControllerClass {
       );
       this.loggingService.logFire(log);
 
-      console.log(log);
-
       return res.status(200).json({
         success: true,
         user: result.user,

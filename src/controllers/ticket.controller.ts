@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { TicketService } from "../services/ticket.service";
-import { LoggerHelper } from "../helper/logger.helper";
 
 class TicketControllerClass {
   private ticketService: TicketService;
@@ -20,7 +19,7 @@ class TicketControllerClass {
       const payload = req.body?.ticketTypes || req.body;
       const result = await this.ticketService.createTicketTypesForEvent(
         authUser,
-        eventId,
+        String(eventId),
         payload,
       );
 

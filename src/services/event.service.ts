@@ -1,9 +1,7 @@
 import { Request } from "express";
 import { EventRepository } from "../repositories/event.repository";
-import { SafeLoggingService } from "./safe-logging.service";
-import { LoggerHelper } from "../helper/logger.helper";
-import { AuditEvent } from "../helper/audit-log.constants";
 import { MessageCode } from "../helper/message.constants";
+import { AppError } from "../utils/app-error";
 
 export type CreateEventInput = {
   title: string;
@@ -21,16 +19,14 @@ export type UpdateEventInput = Partial<CreateEventInput> & {
 
 export class EventService {
   private eventRepository: EventRepository;
-  private loggingService: SafeLoggingService;
 
   constructor() {
     this.eventRepository = new EventRepository();
-    this.loggingService = new SafeLoggingService();
   }
 
   async createEvent(req: Request, authUser: any, input: CreateEventInput) {
     if (!authUser || !["organizer", "admin"].includes(authUser.role)) {
-      throw new Error(`${MessageCode.MSG_16.description}`);
+      throw new AppError(`${MessageCode.MSG_16.description}`, 403);
     }
 
     const {
@@ -44,18 +40,23 @@ export class EventService {
     } = input;
 
     if (!title || !description || !location) {
-      throw new Error(
+      throw new AppError(
         "Validation error: title, description, and location are required",
+        400,
       );
     }
 
     if (!start_date || !end_date) {
-      throw new Error("Validation error: start_date and end_date are required");
+      throw new AppError(
+        "Validation error: start_date and end_date are required",
+        400,
+      );
     }
 
     if (!Number.isInteger(total_capacity) || total_capacity <= 0) {
-      throw new Error(
+      throw new AppError(
         "Validation error: total_capacity must be a positive integer",
+        400,
       );
     }
 
@@ -64,15 +65,24 @@ export class EventService {
     const now = new Date();
 
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      throw new Error("Validation error: start_date or end_date is invalid");
+      throw new AppError(
+        "Validation error: start_date or end_date is invalid",
+        400,
+      );
     }
 
     if (start <= now) {
-      throw new Error("Validation error: start_date must be in the future");
+      throw new AppError(
+        "Validation error: start_date must be in the future",
+        400,
+      );
     }
 
     if (end <= start) {
-      throw new Error("Validation error: end_date must be after start_date");
+      throw new AppError(
+        "Validation error: end_date must be after start_date",
+        400,
+      );
     }
 
     const event = await this.eventRepository.createEvent({
@@ -89,36 +99,24 @@ export class EventService {
       status: "draft",
     });
 
-    const log = LoggerHelper.createLogPayload(
-      req,
-      AuditEvent.BUSINESS.EVENT_CREATED,
-      authUser.id,
-      {
-        targetEntity: "Event",
-        targetId: event.id,
-        details: {
-          eventId: event.id,
-          title: event.title,
-        },
-      },
-    );
-    this.loggingService.logFire(log);
-
     return event;
   }
 
   async updateEvent(authUser: any, eventId: string, input: UpdateEventInput) {
     if (!authUser || !["organizer", "admin"].includes(authUser.role)) {
-      throw new Error(`${MessageCode.MSG_16.description}`);
+      throw new AppError(`${MessageCode.MSG_16.description}`, 403);
     }
 
     const event = await this.eventRepository.getEventById(eventId);
     if (!event) {
-      throw new Error("Event not found");
+      throw new AppError("Event not found", 404);
     }
 
     if (authUser.role !== "admin" && event.organizer_id !== authUser.id) {
-      throw new Error("Unauthorized: You can only update your own events");
+      throw new AppError(
+        "Unauthorized: You can only update your own events",
+        403,
+      );
     }
 
     const updateData: any = {};
@@ -138,11 +136,17 @@ export class EventService {
       const end = input.end_date ? new Date(input.end_date) : event.end_date;
 
       if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-        throw new Error("Validation error: start_date or end_date is invalid");
+        throw new AppError(
+          "Validation error: start_date or end_date is invalid",
+          400,
+        );
       }
 
       if (end <= start) {
-        throw new Error("Validation error: end_date must be after start_date");
+        throw new AppError(
+          "Validation error: end_date must be after start_date",
+          400,
+        );
       }
 
       updateData.start_date = start;
@@ -154,15 +158,17 @@ export class EventService {
         !Number.isInteger(input.total_capacity) ||
         input.total_capacity <= 0
       ) {
-        throw new Error(
+        throw new AppError(
           "Validation error: total_capacity must be a positive integer",
+          400,
         );
       }
 
       const sold = event.total_capacity - event.remaining_capacity;
       if (input.total_capacity < sold) {
-        throw new Error(
+        throw new AppError(
           "Cannot reduce capacity below the number of sold tickets",
+          400,
         );
       }
 
@@ -178,7 +184,7 @@ export class EventService {
   async getEventById(eventId: string) {
     const event = await this.eventRepository.getEventById(eventId);
     if (!event) {
-      throw new Error("Event not found");
+      throw new AppError("Event not found", 404);
     }
 
     return event;

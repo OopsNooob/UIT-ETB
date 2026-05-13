@@ -304,3 +304,58 @@ Stack: TypeError: Cannot read properties of null (reading 'doSomethingCrazy')
 [2026-05-13 16:28:43] [INFO] SYS-000: DB is working.
 [2026-05-13 16:29:43] [INFO] SYS-000: DB is working.
 [2026-05-13 16:30:43] [INFO] SYS-000: DB is working.
+[2026-05-13 22:45:44] [INFO] Health Monitor Cron Job started...
+[2026-05-13 22:45:44] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-13 22:45:44] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-13 22:46:46] [INFO] SYS-000: DB is working.
+[2026-05-13 22:47:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:48:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:49:44] [INFO] SYS-000: DB is working.
+[2026-05-13 22:50:47] [INFO] SYS-000: DB is working.
+[2026-05-13 22:51:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:52:02] [ERROR] Unhandled Exception: Validation error: title, description, and location are required
+Stack: Error: Validation error: title, description, and location are required
+    at EventService.createEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:47:13)
+    at EventControllerClass.createEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:19:46)
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:157:13)
+    at D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\middlewares\auth.middleware.ts:33:12
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+    at next (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\route.js:117:3)
+    at handle (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\router\lib\layer.js:152:17)
+[2026-05-13 22:52:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:53:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:54:45] [INFO] SYS-000: DB is working.
+[2026-05-13 22:55:42] [ERROR] Unhandled Exception: Unauthorized: You can only update your own events
+Stack: Error: Unauthorized: You can only update your own events
+    at EventService.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:121:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async EventControllerClass.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:47:22)
+[2026-05-13 22:55:44] [INFO] SYS-000: DB is working.
+[2026-05-13 23:23:01] [INFO] Health Monitor Cron Job started...
+[2026-05-13 23:23:02] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-13 23:23:02] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-13 23:23:29] [ERROR] Unhandled Exception: Unauthorized: You can only update your own events
+Stack: AppError: Unauthorized: You can only update your own events
+    at EventService.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\event.service.ts:116:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async EventControllerClass.updateEvent (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\event.controller.ts:47:22)
+[2026-05-13 23:24:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:25:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:26:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:27:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:28:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:29:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:30:02] [INFO] SYS-000: DB is working.
+[2026-05-13 23:31:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:32:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:33:04] [INFO] SYS-000: DB is working.
+[2026-05-13 23:34:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:35:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:36:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:37:03] [INFO] SYS-000: DB is working.
+[2026-05-13 23:38:07] [INFO] Health Monitor Cron Job started...
+[2026-05-13 23:38:07] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-13 23:38:07] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health

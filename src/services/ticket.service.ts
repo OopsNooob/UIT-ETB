@@ -1,5 +1,6 @@
 import { EventRepository } from "../repositories/event.repository";
 import { TicketRepository } from "../repositories/ticket.repository";
+import { AppError } from "../utils/app-error";
 
 export type CreateTicketTypeInput = {
   name: string;
@@ -25,25 +26,28 @@ export class TicketService {
     ticketTypes: CreateTicketTypeInput[],
   ) {
     if (!authUser || !["organizer", "admin"].includes(authUser.role)) {
-      throw new Error(
+      throw new AppError(
         "Unauthorized: Only organizers or admins can create ticket types",
+        403,
       );
     }
 
     if (!Array.isArray(ticketTypes) || ticketTypes.length === 0) {
-      throw new Error(
+      throw new AppError(
         "Validation error: ticketTypes must be a non-empty array",
+        400,
       );
     }
 
     const event = await this.eventRepository.getEventById(eventId);
     if (!event) {
-      throw new Error("Event not found");
+      throw new AppError("Event not found", 404);
     }
 
     if (authUser.role !== "admin" && event.organizer_id !== authUser.id) {
-      throw new Error(
+      throw new AppError(
         "Unauthorized: You can only manage ticket types for your own events",
+        403,
       );
     }
 
@@ -53,19 +57,24 @@ export class TicketService {
     );
 
     if (totalQuantity !== event.total_capacity) {
-      throw new Error(
+      throw new AppError(
         "Validation error: total ticket quantities must match event capacity",
+        400,
       );
     }
 
     const mappedTicketTypes = ticketTypes.map((ticket) => {
       if (!ticket.name || !ticket.description) {
-        throw new Error("Validation error: name and description are required");
+        throw new AppError(
+          "Validation error: name and description are required",
+          400,
+        );
       }
 
       if (typeof ticket.price !== "number" || ticket.price < 0) {
-        throw new Error(
+        throw new AppError(
           "Validation error: price must be greater than or equal to 0",
+          400,
         );
       }
 
@@ -73,8 +82,9 @@ export class TicketService {
         !Number.isInteger(ticket.total_quantity) ||
         ticket.total_quantity <= 0
       ) {
-        throw new Error(
+        throw new AppError(
           "Validation error: total_quantity must be a positive integer",
+          400,
         );
       }
 
@@ -85,16 +95,23 @@ export class TicketService {
         Number.isNaN(saleStart.getTime()) ||
         Number.isNaN(saleEnd.getTime())
       ) {
-        throw new Error("Validation error: sale_start or sale_end is invalid");
+        throw new AppError(
+          "Validation error: sale_start or sale_end is invalid",
+          400,
+        );
       }
 
       if (saleEnd <= saleStart) {
-        throw new Error("Validation error: sale_end must be after sale_start");
+        throw new AppError(
+          "Validation error: sale_end must be after sale_start",
+          400,
+        );
       }
 
       if (saleEnd > event.end_date) {
-        throw new Error(
+        throw new AppError(
           "Validation error: sale_end must be before event end_date",
+          400,
         );
       }
 
