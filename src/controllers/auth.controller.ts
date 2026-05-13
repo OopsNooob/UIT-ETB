@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
+import { SafeLoggingService } from "../services/safe-logging.service";
+import { LoggerHelper } from "../helper/logger.helper";
+import { AuditEvent } from "../helper/audit-log.constants";
 
 class AuthControllerClass {
   private authService: AuthService;
+  private loggingService: SafeLoggingService;
 
   constructor() {
     this.authService = new AuthService();
+    this.loggingService = new SafeLoggingService();
   }
 
   register = async (req: Request, res: Response) => {
@@ -13,6 +18,13 @@ class AuthControllerClass {
       const body = req.body;
 
       const user = await this.authService.registerUser(body);
+
+      const log = LoggerHelper.createLogPayload(
+        req,
+        AuditEvent.SECURITY.USER_REGISTERED,
+        user.id,
+      );
+      this.loggingService.logFire(log);
 
       return res.status(201).json({
         success: true,
@@ -31,6 +43,15 @@ class AuthControllerClass {
       const body = req.body;
 
       const result = await this.authService.loginUser(body);
+
+      const log = LoggerHelper.createLogPayload(
+        req,
+        AuditEvent.SECURITY.USER_LOGIN,
+        result.user.id,
+      );
+      this.loggingService.logFire(log);
+
+      console.log(log);
 
       return res.status(200).json({
         success: true,

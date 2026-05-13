@@ -24,6 +24,22 @@ class LoggingControllerClass {
       });
     }
   };
+
+  getLogs = async (req: Request, res: Response) => {
+    try {
+      const logs = await this.loggingService.getLogsService();
+
+      return res.status(200).json({
+        success: true,
+        data: logs,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  };
 }
 
 export const LoggingController = new LoggingControllerClass();

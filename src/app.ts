@@ -6,6 +6,7 @@ import { withHealthGuard } from "./middlewares/health.guard";
 import { withErrorHandler } from "./middlewares/exception.handler";
 import authRoute from "./routes/auth.routes";
 import loggingRoute from "./routes/logging.route";
+import requestIp from "request-ip";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(requestIp.mw());
 
 app.use("/api/v1", withHealthGuard);
 

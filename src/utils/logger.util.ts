@@ -14,6 +14,16 @@ const logFormat = winston.format.combine(
   }),
 );
 
+const dbLogFormat = winston.format.combine(
+  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+  winston.format.printf(({ timestamp, level, message }) => {
+    const formattedMessage =
+      typeof message === "string" ? message : JSON.stringify(message);
+
+    return `[${timestamp}] [${level.toUpperCase()}] ${formattedMessage}`;
+  }),
+);
+
 export const systemLogger = winston.createLogger({
   level: "info",
   format: logFormat,
@@ -35,6 +45,19 @@ export const systemLogger = winston.createLogger({
         winston.format.colorize(),
         winston.format.simple(),
       ),
+    }),
+  ],
+});
+
+export const dbLogger = winston.createLogger({
+  level: "debug",
+  format: dbLogFormat,
+  transports: [
+    new winston.transports.File({
+      filename: path.join(logsDir, "db.log"),
+      level: "debug",
+      maxsize: 5242880,
+      maxFiles: 5,
     }),
   ],
 });

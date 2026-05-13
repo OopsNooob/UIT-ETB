@@ -16,4 +16,8 @@ export class LoggingRepository {
       },
     });
   }
+
+  async getLogs() {
+    return await prisma.auditLog.findMany();
+  }
 }

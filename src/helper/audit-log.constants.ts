@@ -33,6 +33,10 @@ export const AuditEvent = {
       code: "SEC-007",
       description: "User successfully registered a new account.",
     },
+    USER_LOGIN: {
+      code: "SEC-008",
+      description: "User successfully signs in.",
+    },
   },
 
   BUSINESS: {

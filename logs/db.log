@@ -1,0 +1,1 @@
+[2026-05-13 09:52:59] [DEBUG] {"userId":"8e9ae45f-566d-4148-9819-0e25f2f0c154","eventCode":"SEC-008","severityLevel":"normal","action":"SEC","targetEntity":"System","ipAddress":"::1","details":"User successfully signs in."}

@@ -60,7 +60,17 @@ export class AuthService {
     const message = MessageCode.MSG_3.description;
 
     return {
-      user,
+      user: {
+        name: user.name,
+        id: user.id,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        is_active: user.is_active,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        deleted_at: user.deleted_at,
+      },
       token,
       message,
     };

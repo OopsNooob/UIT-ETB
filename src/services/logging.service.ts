@@ -22,4 +22,18 @@ export class LoggingService {
       throw error;
     }
   }
+
+  async getLogsService() {
+    try {
+      const result = await this.loggingRepo.getLogs();
+      return result;
+    } catch (error) {
+      console.error("Failed to get logs from DB:", error);
+      const logError = AuditEvent.SYSTEM.LOG_BROKEN;
+      systemLogger.error(
+        `${logError.code}: ${logError.description} Details: ${error}`,
+      );
+      throw error;
+    }
+  }
 }
