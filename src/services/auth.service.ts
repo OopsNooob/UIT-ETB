@@ -53,9 +53,9 @@ export class AuthService {
       throw new AppError(`${MessageCode.MSG_2.description}`, 401);
     }
 
-    // if (user.status === "banned") {
-    //   throw new Error("Your account has been banned");
-    // }
+    if (user.status === "banned") {
+      throw new AppError("Your account has been banned", 403);
+    }
 
     const token = this.generateToken({ id: user.id, role: user.role });
     const message = MessageCode.MSG_3.description;

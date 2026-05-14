@@ -93,6 +93,7 @@ async function main() {
       name: "Bob Customer",
       email: "bob@example.com",
       phone: "0123456786",
+      status: "banned",
       role: Role.user,
       password_hash: user2PasswordHash,
       is_active: true,
