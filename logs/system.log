@@ -438,3 +438,32 @@ Invalid URL
 [2026-05-14 20:39:36] [INFO] 🚀 Server is running smoothly on port 3000
 [2026-05-14 20:39:36] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
 [2026-05-14 20:40:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out
+[2026-05-14 21:00:59] [INFO] Health Monitor Cron Job started...
+[2026-05-14 21:01:00] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 21:01:00] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 21:02:01] [INFO] SYS-000: DB is working.
+[2026-05-14 21:02:49] [INFO] Health Monitor Cron Job started...
+[2026-05-14 21:02:50] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 21:02:50] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 21:03:50] [INFO] SYS-000: DB is working.
+[2026-05-14 21:04:50] [INFO] SYS-000: DB is working.
+[2026-05-14 21:05:50] [INFO] SYS-000: DB is working.
+[2026-05-14 21:06:50] [INFO] SYS-000: DB is working.
+[2026-05-14 21:07:29] [INFO] Health Monitor Cron Job started...
+[2026-05-14 21:07:30] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 21:07:30] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 21:08:31] [INFO] SYS-000: DB is working.
+[2026-05-14 21:09:30] [INFO] SYS-000: DB is working.
+[2026-05-14 21:10:30] [INFO] SYS-000: DB is working.
+[2026-05-14 21:11:31] [INFO] SYS-000: DB is working.
+[2026-05-14 21:11:38] [ERROR] Unhandled Exception: Your username or password might be wrong. Please check and try again later.
+Stack: AppError: Your username or password might be wrong. Please check and try again later.
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:53:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-14 21:12:30] [INFO] SYS-000: DB is working.
+[2026-05-14 21:14:36] [INFO] Health Monitor Cron Job started...
+[2026-05-14 21:14:37] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 21:14:37] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 21:15:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-14 21:16:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-14 21:17:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s

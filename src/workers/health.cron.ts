@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { systemLogger } from "../utils/logger.util";
 import { AuditEvent } from "../helper/audit-log.constants";
-import { error } from "console";
 
 declare global {
   var isDbHealthy: boolean | undefined;

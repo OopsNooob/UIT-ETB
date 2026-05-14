@@ -102,3 +102,10 @@ Invalid `prisma.$queryRaw()` invocation:
 
 Invalid URL
 [2026-05-14 20:40:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out
+[2026-05-14 21:11:38] [ERROR] Unhandled Exception: Your username or password might be wrong. Please check and try again later.
+Stack: AppError: Your username or password might be wrong. Please check and try again later.
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:53:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-14 21:15:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-14 21:16:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-14 21:17:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
