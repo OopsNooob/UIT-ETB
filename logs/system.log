@@ -359,3 +359,5 @@ Stack: AppError: Unauthorized: You can only update your own events
 [2026-05-13 23:38:07] [INFO] Health Monitor Cron Job started...
 [2026-05-13 23:38:07] [INFO] 🚀 Server is running smoothly on port 3000
 [2026-05-13 23:38:07] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 09:13:55] [INFO] [STARTUP] Next.js server initializing - instrumentation hook triggered
+[2026-05-14 09:13:55] [INFO] [STARTUP] Database connection and health monitor ready

@@ -1,22 +1,60 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { mockApi as api } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
-// Mock Id - no longer needed
-// import { Id } from "@/convex/_generated/dataModel";
+import { useEffect, useState } from "react";
+import { useEvents } from "@/hooks/useEvents";
 import EventForm from "@/components/EventForm";
 import { AlertCircle } from "lucide-react";
 import RoleGuard from "@/components/RoleGuard";
+import Spinner from "@/components/Spinner";
 
 export default function EditEventPage() {
   const params = useParams();
   const eventId = params.id as string;
-  const event = useQuery(api.events.getById, {
-    eventId,
-  });
+  const { getEventById } = useEvents();
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!event) return null;
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const result = await getEventById(eventId);
+        if (result.success) {
+          setEvent(result.data);
+        } else {
+          console.error("Failed to fetch event:", result.error);
+        }
+      } catch (error) {
+        console.error("Error fetching event:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (eventId) {
+      fetchEvent();
+    }
+  }, [eventId, getEventById]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!event) {
+    return (
+      <RoleGuard allowedRole="organizer">
+        <div className="max-w-3xl mx-auto p-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-800">Event not found</p>
+          </div>
+        </div>
+      </RoleGuard>
+    );
+  }
 
   return (
     <RoleGuard allowedRole="organizer">

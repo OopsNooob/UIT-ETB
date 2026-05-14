@@ -1,362 +1,178 @@
 "use client";
 
-import { mockApi as api } from "@/lib/mockHooks";
-import { useUser } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
-import { CalendarDays, DollarSign, Plus, TrendingUp } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useEvents } from "@/hooks/useEvents";
 import Link from "next/link";
-import Spinner from "./Spinner";
-import ExportButton from "./ExportButton";
-import { useState } from "react";
-import {
-  exportRevenueToCSV,
-  exportToJSON,
-  generateExportTimestamp,
-  formatDateForExport,
-  type RevenueReportRow,
-} from "@/lib/exports/exportUtils";
+import { useEffect } from "react";
 
 export default function SellerDashboard() {
-  const { user } = useUser();
-  
-  // Get current month/year
-  const now = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1); // 1-12
-  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+  const { user } = useAuth();
+  const { events, isLoading, getAllEvents } = useEvents();
 
-  // Get overall statistics
-  const stats = useQuery(
-    api.payments.getSellerStats,
-    user ? { userId: user.id } : "skip"
-  ) || {
-    totalRevenue: 0,
-    netRevenue: 0,
-    totalTicketsSold: 0,
-    totalEvents: 0,
-    averageTicketPrice: 0,
-    pendingAmount: 0,
-    totalRefunded: 0,
-  };
+  useEffect(() => {
+    console.log("SellerDashboard: user =", user);
+    getAllEvents();
+  }, [getAllEvents]);
 
-  // Get monthly statistics
-  const monthlyStats = useQuery(
-    api.payments.getSellerStatsByMonth,
-    user ? { userId: user.id, month: selectedMonth, year: selectedYear } : "skip"
-  ) || {
-    monthlyRevenue: 0,
-    monthlyTicketsSold: 0,
-    eventBreakdown: [],
-  };
-
-  /**
-   * Handle export of revenue data
-   */
-  const handleExportRevenue = async (format: "csv" | "json") => {
-    if (!monthlyStats || !stats) return;
-
-    if (format === "csv") {
-      // Prepare revenue report data
-      const revenueData: RevenueReportRow[] = monthlyStats.eventBreakdown.map(
-        (event: any) => ({
-          eventId: event.eventId,
-          eventName: event.eventName,
-          eventDate: formatDateForExport(new Date()),
-          location: "N/A",
-          ticketsSold: event.ticketsSold,
-          price: monthlyStats.totalRevenue / Math.max(monthlyStats.completedCount, 1),
-          totalRevenue: event.revenue,
-          refundedAmount: 0,
-          netRevenue: event.revenue,
-          status: "completed" as const,
-          exportedAt: generateExportTimestamp(),
-        })
-      );
-
-      exportRevenueToCSV(
-        revenueData,
-        `revenue_${selectedYear}_${String(selectedMonth).padStart(2, "0")}.csv`
-      );
-    } else {
-      // Export as JSON
-      const jsonData = {
-        exportDate: generateExportTimestamp(),
-        month: selectedMonth,
-        year: selectedYear,
-        summary: {
-          totalRevenue: stats.totalRevenue,
-          netRevenue: stats.netRevenue,
-          totalRefunded: stats.totalRefunded,
-          pendingAmount: stats.pendingAmount,
-        },
-        monthlyData: {
-          revenue: monthlyStats.totalRevenue,
-          netRevenue: monthlyStats.netRevenue,
-          completedPayments: monthlyStats.completedCount,
-          refundedPayments: monthlyStats.refundedCount,
-          events: monthlyStats.eventBreakdown,
-        },
-      };
-
-      exportToJSON(
-        jsonData,
-        `revenue_${selectedYear}_${String(selectedMonth).padStart(2, "0")}.json`
-      );
-    }
-  };
-
-  if (!user) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Please sign in to access seller dashboard</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
 
-  if (stats === undefined || monthlyStats === undefined) {
-    return <Spinner />;
-  }
+  const organizerEvents = events.filter(
+    (event) => event.organizer_id === user?.id
+  );
 
-  // Generate month options (last 12 months)
-  const monthOptions = [];
-  for (let i = 0; i < 12; i++) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    monthOptions.push({
-      month: date.getMonth() + 1,
-      year: date.getFullYear(),
-      label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    });
-  }
+  console.log("SellerDashboard: events =", events);
+  console.log("SellerDashboard: user?.id =", user?.id);
+  console.log("SellerDashboard: organizerEvents =", organizerEvents);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-white">
-          <h2 className="text-2xl font-bold">Seller Dashboard</h2>
-          <p className="text-blue-100 mt-2">
-            Manage your events and track your earnings
-          </p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Seller Dashboard</h1>
+        <p className="mt-2 text-gray-600">Manage your events and sales</p>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-600 text-sm font-medium">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold text-green-700 mt-2">
-                  ${stats.totalRevenue.toFixed(2)}
-                </p>
-              </div>
-              <DollarSign className="w-10 h-10 text-green-600 opacity-50" />
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-600 text-sm font-medium">
-                  Net Revenue
-                </p>
-                <p className="text-2xl font-bold text-blue-700 mt-2">
-                  ${stats.netRevenue.toFixed(2)}
-                </p>
-              </div>
-              <TrendingUp className="w-10 h-10 text-blue-600 opacity-50" />
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-yellow-600 text-sm font-medium">Pending</p>
-                <p className="text-2xl font-bold text-yellow-700 mt-2">
-                  ${stats.pendingAmount.toFixed(2)}
-                </p>
-              </div>
-              <DollarSign className="w-10 h-10 text-yellow-600 opacity-50" />
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-red-600 text-sm font-medium">Refunded</p>
-                <p className="text-2xl font-bold text-red-700 mt-2">
-                  ${stats.totalRefunded.toFixed(2)}
-                </p>
-              </div>
-              <DollarSign className="w-10 h-10 text-red-600 opacity-50" />
-            </div>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-gray-600 text-sm font-medium">Total Events</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">
+            {organizerEvents.length}
           </div>
         </div>
-
-        {/* Payment Summary */}
-        <div className="p-6">
-          <div className="bg-gray-50 rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Payment Summary
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-gray-600 text-sm">Completed</p>
-                <p className="text-2xl font-semibold text-green-600">
-                  {stats.completedCount}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Pending</p>
-                <p className="text-2xl font-semibold text-yellow-600">
-                  {stats.pendingCount}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Refunded</p>
-                <p className="text-2xl font-semibold text-red-600">
-                  {stats.refundedCount}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Failed</p>
-                <p className="text-2xl font-semibold text-gray-600">
-                  {stats.failedCount}
-                </p>
-              </div>
-            </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-gray-600 text-sm font-medium">Active Events</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">
+            {organizerEvents.filter((e) => e.status === "published").length}
           </div>
         </div>
-
-        {/* Action Buttons */}
-        <div className="p-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Manage Your Events
-            </h2>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/seller/new-event"
-                className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-              >
-                <Plus className="w-5 h-5" />
-                Create New Event
-              </Link>
-              <Link
-                href="/seller/events"
-                className="flex items-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors shadow-md"
-              >
-                <CalendarDays className="w-5 h-5" />
-                View My Events
-              </Link>
-              <ExportButton
-                label="Export Revenue"
-                showFormatMenu={true}
-                onExport={(format) => handleExportRevenue(format)}
-              />
-            </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-gray-600 text-sm font-medium">Total Capacity</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">
+            {organizerEvents.reduce(
+              (sum, e) => sum + (e.total_capacity || 0),
+              0
+            )}
           </div>
         </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-gray-600 text-sm font-medium">Available Slots</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">
+            {organizerEvents.reduce(
+              (sum, e) => sum + (e.remaining_capacity || 0),
+              0
+            )}
+          </div>
+        </div>
+      </div>
 
-        {/* Monthly Revenue Breakdown */}
-        <div className="p-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    Monthly Revenue Breakdown
-                  </h2>
-                  <p className="text-sm text-gray-600 mt-1">
-                    View revenue and performance for a specific month
-                  </p>
-                </div>
-                <div>
-                  <select
-                    value={`${selectedYear}-${selectedMonth}`}
-                    onChange={(e) => {
-                      const [year, month] = e.target.value.split('-');
-                      setSelectedYear(parseInt(year));
-                      setSelectedMonth(parseInt(month));
-                    }}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    {monthOptions.map((option) => (
-                      <option key={`${option.year}-${option.month}`} value={`${option.year}-${option.month}`}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+      {/* Action Buttons */}
+      <div className="mb-8">
+        <Link href="/seller/new-event">
+          <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+            + Create New Event
+          </button>
+        </Link>
+      </div>
 
-            {/* Monthly Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-gray-50">
-              <div className="bg-white rounded-lg shadow p-4">
-                <p className="text-sm text-gray-600">Revenue</p>
-                <p className="text-2xl font-bold text-green-600">${monthlyStats.totalRevenue.toFixed(2)}</p>
-              </div>
-              <div className="bg-white rounded-lg shadow p-4">
-                <p className="text-sm text-gray-600">Net Revenue</p>
-                <p className="text-2xl font-bold text-blue-600">${monthlyStats.netRevenue.toFixed(2)}</p>
-              </div>
-              <div className="bg-white rounded-lg shadow p-4">
-                <p className="text-sm text-gray-600">Tickets Sold</p>
-                <p className="text-2xl font-bold text-purple-600">{monthlyStats.completedCount}</p>
-              </div>
-              <div className="bg-white rounded-lg shadow p-4">
-                <p className="text-sm text-gray-600">Total Payments</p>
-                <p className="text-2xl font-bold text-gray-600">{monthlyStats.totalPayments}</p>
-              </div>
-            </div>
-
-            {/* Event Breakdown Table */}
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Performance</h3>
-              {monthlyStats?.eventBreakdown?.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Event Name
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Tickets Sold
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Revenue
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {monthlyStats.eventBreakdown.map((event: any) => (
-                        <tr key={event.eventId} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{event.eventName}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{event.ticketsSold}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-semibold text-green-600">
-                              ${event.revenue.toFixed(2)}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+      {/* Events Summary */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Your Events</h2>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Event Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Capacity
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Available
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {organizerEvents.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center">
+                    <p className="text-gray-600">
+                      No events yet.{" "}
+                      <Link
+                        href="/seller/new-event"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Create one now
+                      </Link>
+                    </p>
+                  </td>
+                </tr>
               ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <p className="text-lg font-medium text-gray-900 mb-2">No sales this month</p>
-                  <p className="text-sm">No tickets were sold in {monthOptions.find(o => o.month === selectedMonth && o.year === selectedYear)?.label}</p>
-                </div>
+                organizerEvents.map((event) => (
+                  <tr key={event.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <p className="text-sm font-medium text-gray-900">
+                        {event.title}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <p className="text-sm text-gray-600">
+                        {new Date(event.start_date).toLocaleDateString()}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <p className="text-sm text-gray-900">
+                        {event.total_capacity}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <p className="text-sm text-gray-900">
+                        {event.remaining_capacity}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          event.status === "published"
+                            ? "bg-green-100 text-green-800"
+                            : event.status === "draft"
+                            ? "bg-gray-100 text-gray-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {event.status || "draft"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Link
+                        href={`/seller/events/${event.id}/edit`}
+                        className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                      >
+                        Edit
+                      </Link>
+                    </td>
+                  </tr>
+                ))
               )}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

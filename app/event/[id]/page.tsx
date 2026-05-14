@@ -1,37 +1,65 @@
 "use client";
 
-// Mock Id - no longer needed
-// import { Id } from "@/convex/_generated/dataModel";
-import { mockApi as api } from "@/lib/mockHooks";
-import { useQuery, useUser } from "@/lib/mockHooks";
 import { CalendarDays, MapPin, Ticket, Users } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
 import JoinQueue from "@/components/JoinQueue";
-import { SignInButton } from "@/lib/mockComponents";
-import { useStorageUrl } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { useEvents } from "@/hooks/useEvents";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 export default function EventPage() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const params = useParams();
   const eventId = params.id as string;
-  const event = useQuery(api.events.getById, {
-    eventId,
-  });
-  const availability = useQuery(api.events.getEventAvailability, {
-    eventId,
-  });
-  const imageUrl = useStorageUrl(event?.imageStorageId);
+  const { getEventById } = useEvents();
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!event || !availability) {
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const result = await getEventById(eventId);
+        if (result.success) {
+          setEvent(result.data);
+        } else {
+          console.error("Failed to fetch event:", result.error);
+        }
+      } catch (error) {
+        console.error("Error fetching event:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (eventId) {
+      fetchEvent();
+    }
+  }, [eventId, getEventById]);
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Spinner />
       </div>
     );
   }
+
+  if (!event) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl text-gray-500">Event not found</p>
+      </div>
+    );
+  }
+
+  const imageUrl = event.banner_url;
+  const price = event.price || 0;
+  const totalTickets = event.total_capacity || 0;
+  const remainingTickets = event.remaining_capacity ?? totalTickets;
+  const purchasedCount = totalTickets - remainingTickets;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,7 +69,7 @@ export default function EventPage() {
             <div className="aspect-[21/9] relative w-full">
               <Image
                 src={imageUrl}
-                alt={event.name}
+                alt={event.title}
                 fill
                 className="object-cover"
                 priority
@@ -55,7 +83,7 @@ export default function EventPage() {
               <div className="space-y-8">
                 <div>
                   <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                    {event.name}
+                    {event.title}
                   </h1>
                   <p className="text-lg text-gray-600">{event.description}</p>
                 </div>
@@ -67,7 +95,7 @@ export default function EventPage() {
                       <span className="text-sm font-medium">Date</span>
                     </div>
                     <p className="text-gray-900">
-                      {new Date(event.eventDate).toLocaleDateString()}
+                      {new Date(event.start_date).toLocaleDateString()}
                     </p>
                   </div>
 
@@ -81,20 +109,11 @@ export default function EventPage() {
 
                   <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                     <div className="flex items-center text-gray-600 mb-1">
-                      <Ticket className="w-5 h-5 mr-2 text-blue-600" />
-                      <span className="text-sm font-medium">Price</span>
-                    </div>
-                    <p className="text-gray-900">£{event.price.toFixed(2)}</p>
-                  </div>
-
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                    <div className="flex items-center text-gray-600 mb-1">
                       <Users className="w-5 h-5 mr-2 text-blue-600" />
                       <span className="text-sm font-medium">Availability</span>
                     </div>
                     <p className="text-gray-900">
-                      {availability.totalTickets - availability.purchasedCount}{" "}
-                      / {availability.totalTickets} left
+                      {remainingTickets} / {totalTickets} left
                     </p>
                   </div>
                 </div>
@@ -122,16 +141,25 @@ export default function EventPage() {
                     </h3>
                     
                     {user ? (
-                      <JoinQueue
-                        eventId={eventId}
-                        userId={user.id}
-                      />
+                      user.role === "organizer" ? (
+                        <div className="w-full text-center p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                          <p className="text-gray-600 font-medium">Organizers cannot purchase tickets.</p>
+                        </div>
+                      ) : (
+                        <JoinQueue
+                          eventId={eventId}
+                          userId={user.id}
+                        />
+                      )
                     ) : (
-                      <SignInButton>
-                        <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                      <div className="w-full">
+                        <Button 
+                          className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                          onClick={() => window.location.href = '/sign-in'}
+                        >
                           Sign in to buy tickets
                         </Button>
-                      </SignInButton>
+                      </div>
                     )}
                   </div>
                 </div>
