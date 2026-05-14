@@ -359,3 +359,82 @@ Stack: AppError: Unauthorized: You can only update your own events
 [2026-05-13 23:38:07] [INFO] Health Monitor Cron Job started...
 [2026-05-13 23:38:07] [INFO] 🚀 Server is running smoothly on port 3000
 [2026-05-13 23:38:07] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:09:12] [INFO] Health Monitor Cron Job started...
+[2026-05-14 20:09:14] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 20:09:14] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:10:15] [INFO] SYS-000: DB is working.
+[2026-05-14 20:11:13] [INFO] SYS-000: DB is working.
+[2026-05-14 20:12:13] [INFO] SYS-000: DB is working.
+[2026-05-14 20:13:47] [INFO] Health Monitor Cron Job started...
+[2026-05-14 20:13:47] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 20:13:47] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:14:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:15:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:16:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:17:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:18:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:19:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:20:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:21:47] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:22:43] [INFO] Health Monitor Cron Job started...
+[2026-05-14 20:22:44] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 20:22:44] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:23:46] [INFO] SYS-000: DB is working.
+[2026-05-14 20:24:44] [INFO] SYS-000: DB is working.
+[2026-05-14 20:25:44] [INFO] SYS-000: DB is working.
+[2026-05-14 20:26:44] [INFO] SYS-000: DB is working.
+[2026-05-14 20:27:44] [INFO] SYS-000: DB is working.
+[2026-05-14 20:32:37] [INFO] Health Monitor Cron Job started...
+[2026-05-14 20:32:38] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 20:32:38] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:33:37] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:34:37] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:35:37] [ERROR] SYS-001: DB is down. Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Invalid URL
+[2026-05-14 20:39:36] [INFO] Health Monitor Cron Job started...
+[2026-05-14 20:39:36] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-14 20:39:36] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-14 20:40:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out
