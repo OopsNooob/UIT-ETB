@@ -18,7 +18,9 @@ export default function EditEventPage() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
+        console.log("EditEventPage: Fetching event with ID:", eventId);
         const result = await getEventById(eventId);
+        console.log("EditEventPage: getEventById result:", result);
         if (result.success) {
           setEvent(result.data);
         } else {
