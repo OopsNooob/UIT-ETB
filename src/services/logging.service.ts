@@ -12,6 +12,9 @@ export class LoggingService {
 
   async createLogService(payload: AuditLogPayload) {
     try {
+      if (payload.action === null)
+        throw new AppError("Missing required payload data in log", 500);
+
       const result = await this.loggingRepo.createLog(payload);
       return result;
     } catch (error) {

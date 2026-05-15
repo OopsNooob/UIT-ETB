@@ -109,3 +109,13 @@ Stack: AppError: Your username or password might be wrong. Please check and try 
 [2026-05-14 21:15:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
 [2026-05-14 21:16:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
 [2026-05-14 21:17:39] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-14 22:55:20] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:57:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-14 23:08:06] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-15 22:11:41] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-15 22:13:17] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:57:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
