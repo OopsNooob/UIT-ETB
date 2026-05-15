@@ -20,8 +20,19 @@ export const startHealthMonitor = (prisma: PrismaClient) => {
   systemLogger.info("Health Monitor Cron Job started...");
 
   setInterval(async () => {
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("Database health check timed out after 3s")),
+        3000,
+      ),
+    );
+
     try {
-      await prisma.$queryRaw`SELECT 1`;
+      await Promise.race([prisma.$queryRaw`SELECT 1`, timeoutPromise]);
+      // await Promise.race([
+      //   prisma.$queryRaw`SELECT pg_sleep(5)`,
+      //   timeoutPromise,
+      // ]);
 
       if (!globalThis.isDbHealthy) {
         const recoveryLog = AuditEvent.SYSTEM.DB_CONNECTION_STATUS_CHANGED;
