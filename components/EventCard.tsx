@@ -1,162 +1,57 @@
 "use client";
 
-import { mockApi as api } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
-// Mock Id - no longer needed
-// import { Id } from "@/convex/_generated/dataModel";
 import {
   CalendarDays,
   MapPin,
   Ticket,
   Check,
-  CircleArrowRight,
-  LoaderCircle,
-  XCircle,
   PencilIcon,
   StarIcon,
 } from "lucide-react";
-import { useUser } from "@/lib/mockHooks";
 import { useRouter } from "next/navigation";
-import { useStorageUrl } from "@/lib/utils";
-import Image from "next/image";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
 
 export default function EventCard({ eventId }: { eventId: any }) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const router = useRouter();
-  const event = useQuery(api.events.getById, { eventId });
-  const availability = useQuery(api.events.getEventAvailability, { eventId });
-  const userTicket = useQuery(api.tickets.getUserTicketForEvent, {
-    eventId,
-    userId: user?.id ?? "",
-    userEmail: user?.email ?? "",
-  });
-  const userTicketCount = useQuery(api.tickets.getUserTicketCountForEvent, {
-    eventId,
-    userId: user?.id ?? "",
-    userEmail: user?.email ?? "",
-  });
-  const queuePosition = useQuery(api.waitingList.getQueuePosition, {
-    eventId,
-    userId: user?.id ?? "",
-  });
-  const imageUrl = useStorageUrl(event?.imageStorageId);
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!event || !availability) {
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1"}/events/${eventId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.success && data.data) {
+          setEvent(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch event:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [eventId]);
+
+  if (loading || !event) {
     return null;
   }
 
-  const isPastEvent = event.eventDate < Date.now();
-
-  const isEventOwner = user?.id === event?.organizerId || user?.email === event?.organizerId;
-
-  const renderQueuePosition = () => {
-    if (!queuePosition || queuePosition.status !== "waiting") return null;
-
-    if (availability.purchasedCount >= availability.totalTickets) {
-      return (
-        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="flex items-center">
-            <Ticket className="w-5 h-5 text-gray-400 mr-2" />
-            <span className="text-gray-600">Event is sold out</span>
-          </div>
-        </div>
-      );
-    }
-
-    if (queuePosition.position === 2) {
-      return (
-        <div className="flex flex-col lg:flex-row items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-100">
-          <div className="flex items-center">
-            <CircleArrowRight className="w-5 h-5 text-amber-500 mr-2" />
-            <span className="text-amber-700 font-medium">
-              You&apos;re next in line! (Queue position:{" "}
-              {queuePosition.position})
-            </span>
-          </div>
-          <div className="flex items-center">
-            <LoaderCircle className="w-4 h-4 mr-1 animate-spin text-amber-500" />
-            <span className="text-amber-600 text-sm">Waiting for ticket</span>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
-        <div className="flex items-center">
-          <LoaderCircle className="w-4 h-4 mr-2 animate-spin text-blue-500" />
-          <span className="text-blue-700">Queue position</span>
-        </div>
-        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
-          #{queuePosition.position}
-        </span>
-      </div>
-    );
-  };
-
-  const renderTicketStatus = () => {
-    if (!user) return null;
-
-    if (isEventOwner) {
-      return (
-        <div className="mt-4">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/seller/events/${eventId}/edit`);
-            }}
-            className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 shadow-sm flex items-center justify-center gap-2"
-          >
-            <PencilIcon className="w-5 h-5" />
-            Edit Event
-          </button>
-        </div>
-      );
-    }
-
-    if (userTicket && userTicketCount !== undefined && userTicketCount > 0) {
-      return (
-        <div className="mt-4 flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
-          <div className="flex items-center">
-            <Check className="w-5 h-5 text-green-600 mr-2" />
-            <div>
-              <span className="text-green-700 font-medium block">
-                You have {userTicketCount} ticket{userTicketCount > 1 ? 's' : ''}!
-              </span>
-              <span className="text-green-600 text-xs">
-                You can buy more if needed
-              </span>
-            </div>
-          </div>
-          <button
-            onClick={() => router.push(`/tickets/event/${eventId}`)}
-            className="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-full font-medium shadow-sm transition-colors duration-200 flex items-center gap-1"
-          >
-            View tickets
-          </button>
-        </div>
-      );
-    }
-
-    if (queuePosition) {
-      return (
-        <div className="mt-4">
-          {/* Purchase form is now handled by JoinQueue component */}
-          {renderQueuePosition()}
-          {queuePosition.status === "expired" && (
-            <div className="p-3 bg-red-50 rounded-lg border border-red-100">
-              <span className="text-red-700 font-medium flex items-center">
-                <XCircle className="w-5 h-5 mr-2" />
-                Offer expired
-              </span>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return null;
-  };
+  const isPastEvent = new Date(event.start_date).getTime() < Date.now();
+  const isEventOwner = user?.id === event?.organizer_id;
+  const availableTickets = event.remaining_capacity ?? event.total_capacity;
+  const isSoldOut = availableTickets <= 0;
 
   return (
     <div
@@ -165,21 +60,22 @@ export default function EventCard({ eventId }: { eventId: any }) {
         isPastEvent ? "opacity-75 hover:opacity-100" : ""
       }`}
     >
-      {/* Event Image */}
-      {imageUrl && (
-        <div className="relative w-full h-48">
-          <Image
-            src={imageUrl}
-            alt={event.name}
-            fill
-            className="object-cover"
-            priority
+      {/* Event Image Placeholder or Banner */}
+      {event.banner_url ? (
+        <div className="relative w-full h-48 bg-gray-100">
+          <img
+            src={event.banner_url}
+            alt={event.title}
+            className="w-full h-48 object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </div>
+      ) : (
+        <div className="relative w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+          <Ticket className="w-16 h-16 text-blue-300" />
         </div>
       )}
 
-      <div className={`p-6 ${imageUrl ? "relative" : ""}`}>
+      <div className="p-6">
         <div className="flex justify-between items-start">
           <div>
             <div className="flex flex-col items-start gap-2">
@@ -189,7 +85,9 @@ export default function EventCard({ eventId }: { eventId: any }) {
                   Your Event
                 </span>
               )}
-              <h2 className="text-2xl font-bold text-gray-900">{event.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {event.title}
+              </h2>
             </div>
             {isPastEvent && (
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mt-2">
@@ -198,18 +96,22 @@ export default function EventCard({ eventId }: { eventId: any }) {
             )}
           </div>
 
-          {/* Price Tag */}
+          {/* Status Tag */}
           <div className="flex flex-col items-end gap-2 ml-4">
-            <span
-              className={`px-4 py-1.5 font-semibold rounded-full ${
-                isPastEvent
-                  ? "bg-gray-50 text-gray-500"
-                  : "bg-green-50 text-green-700"
-              }`}
-            >
-              £{event.price.toFixed(2)}
-            </span>
-            {availability.purchasedCount >= availability.totalTickets && (
+            {event.status && (
+              <span
+                className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                  event.status === "published"
+                    ? "bg-green-100 text-green-800"
+                    : event.status === "draft"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+              </span>
+            )}
+            {isSoldOut && (
               <span className="px-4 py-1.5 bg-red-50 text-red-700 font-semibold rounded-full text-sm">
                 Sold Out
               </span>
@@ -226,24 +128,14 @@ export default function EventCard({ eventId }: { eventId: any }) {
           <div className="flex items-center text-gray-600">
             <CalendarDays className="w-4 h-4 mr-2" />
             <span>
-              {new Date(event.eventDate).toLocaleDateString()}{" "}
-              {isPastEvent && "(Ended)"}
+              {new Date(event.start_date).toLocaleDateString()}
+              {isPastEvent && " (Ended)"}
             </span>
           </div>
 
           <div className="flex items-center text-gray-600">
             <Ticket className="w-4 h-4 mr-2" />
-            <span>
-              {availability.totalTickets - availability.purchasedCount} /{" "}
-              {availability.totalTickets} available
-              {!isPastEvent && availability.activeOffers > 0 && (
-                <span className="text-amber-600 text-sm ml-2">
-                  ({availability.activeOffers}{" "}
-                  {availability.activeOffers === 1 ? "person" : "people"} trying
-                  to buy)
-                </span>
-              )}
-            </span>
+            <span>{availableTickets} / {event.total_capacity} available</span>
           </div>
         </div>
 
@@ -251,10 +143,22 @@ export default function EventCard({ eventId }: { eventId: any }) {
           {event.description}
         </p>
 
-        <div onClick={(e) => e.stopPropagation()}>
-          {!isPastEvent && renderTicketStatus()}
+        <div onClick={(e) => e.stopPropagation()} className="mt-4">
+          {isEventOwner && !isPastEvent && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/seller/events/${eventId}/edit`);
+              }}
+              className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 shadow-sm flex items-center justify-center gap-2"
+            >
+              <PencilIcon className="w-5 h-5" />
+              Edit Event
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 }
+

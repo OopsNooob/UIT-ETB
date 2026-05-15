@@ -1,37 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
-import { useUser } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
-import { mockApi as api } from "@/lib/mockHooks";
+import { useAuth } from "@/hooks/useAuth";
 import Spinner from "./Spinner";
 
 interface RoleGuardProps {
   children: React.ReactNode;
-  allowedRole: "user" | "organizer";
-  onRoleMismatch?: () => void; // Callback for role mismatch
+  allowedRole: "user" | "organizer" | "admin";
+  onRoleMismatch?: () => void;
 }
 
 export default function RoleGuard({ children, allowedRole, onRoleMismatch }: RoleGuardProps) {
-  const { user, isLoaded } = useUser();
+  const { user, isLoading } = useAuth();
 
-  const userRole = useQuery(
-    api.users.getUserRole,
-    user?.id ? { userId: user.id } : "skip"
-  );
-
-  // Run the callback after render when mismatch is detected
-  useEffect(() => {
-    if (!isLoaded || !user || userRole === undefined) return;
-
-    if (userRole !== allowedRole) {
-      // Call callback after render, avoiding setState-in-render error
-      onRoleMismatch?.();
-    }
-  }, [isLoaded, user, userRole, allowedRole, onRoleMismatch]);
-
-  // Show a loading spinner while the user or role is being loaded
-  if (!isLoaded || userRole === undefined) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Spinner />
@@ -39,11 +20,20 @@ export default function RoleGuard({ children, allowedRole, onRoleMismatch }: Rol
     );
   }
 
-  // If mismatch, don't render children (parent callback was already triggered by effect)
-  if (user && userRole !== allowedRole) {
+  // If user not logged in or role doesn't match
+  if (!user) {
+    onRoleMismatch?.();
     return null;
   }
 
-  // Render children if the role matches
+  // Map user.role to allowed role
+  // Backend returns role as "organizer", "admin", or "user" (stored in user table)
+  const userRole = user.role || "user";
+  
+  if (userRole !== allowedRole) {
+    onRoleMismatch?.();
+    return null;
+  }
+
   return <>{children}</>;
 }

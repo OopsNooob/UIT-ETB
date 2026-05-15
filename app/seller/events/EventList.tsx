@@ -1,12 +1,9 @@
 "use client";
 
-import { useQuery } from "@/lib/mockHooks";
-import { mockApi as api } from "@/lib/mockHooks";
+import { useEffect } from "react";
 import Spinner from "@/components/Spinner";
 import { Calendar, Ticket, DollarSign, Clock } from "lucide-react";
-import { useStorageUrl } from "@/lib/utils";
-// Mock Id - no longer needed
-// import { Id } from "@/convex/_generated/dataModel";
+import { useEvents } from "@/hooks/useEvents";
 
 interface EventListProps {
   userId: string;
@@ -14,10 +11,16 @@ interface EventListProps {
   onEventClick: (eventId: string) => void;
 }
 
-function EventCard({ event, onEventClick }: { event: any; onEventClick: () => void }) {
-  const imageUrl = useStorageUrl(event.imageStorageId);
-  const now = Date.now();
-  const isEnded = event.eventDate < now;
+function EventCard({
+  event,
+  onEventClick,
+}: {
+  event: any;
+  onEventClick: () => void;
+}) {
+  const now = new Date().getTime();
+  const eventDateTime = new Date(event.start_date).getTime();
+  const isEnded = eventDateTime < now;
 
   return (
     <button
@@ -27,17 +30,9 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
       <div className="flex flex-col md:flex-row">
         {/* Event Image */}
         <div className="relative w-full md:w-64 h-48 bg-gray-100 flex-shrink-0">
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={event.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-              <Calendar className="w-16 h-16 text-gray-400" />
-            </div>
-          )}
+          <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+            <Calendar className="w-16 h-16 text-gray-400" />
+          </div>
         </div>
 
         {/* Event Info */}
@@ -45,7 +40,7 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
           <div className="flex items-start justify-between mb-4">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                {event.name}
+                {event.title}
               </h3>
               <p className="text-gray-600">{event.description}</p>
             </div>
@@ -56,9 +51,9 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
             <div className="flex items-center gap-2">
               <Ticket className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="text-xs text-gray-600">Tickets Sold</p>
+                <p className="text-xs text-gray-600">Available</p>
                 <p className="font-bold text-gray-900">
-                  {event.ticketsSold ?? 0}/{event.totalTickets}
+                  {event.remaining_capacity ?? event.total_capacity}/{event.total_capacity}
                 </p>
               </div>
             </div>
@@ -66,9 +61,9 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
             <div className="flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-green-600" />
               <div>
-                <p className="text-xs text-gray-600">Revenue</p>
+                <p className="text-xs text-gray-600">Status</p>
                 <p className="font-bold text-gray-900">
-                  £{((event.ticketsSold ?? 0) * event.price).toFixed(0)}
+                  {event.status || "draft"}
                 </p>
               </div>
             </div>
@@ -78,7 +73,7 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
               <div>
                 <p className="text-xs text-gray-600">Date</p>
                 <p className="font-bold text-gray-900">
-                  {new Date(event.eventDate).toLocaleDateString("en-US", {
+                  {new Date(event.start_date).toLocaleDateString("en-US", {
                     month: "numeric",
                     day: "numeric",
                     year: "numeric",
@@ -103,10 +98,18 @@ function EventCard({ event, onEventClick }: { event: any; onEventClick: () => vo
   );
 }
 
-export default function EventList({ userId, filter, onEventClick }: EventListProps) {
-  const events = useQuery(api.events.getSellerEventsWithStats, { userId });
+export default function EventList({
+  userId,
+  filter,
+  onEventClick,
+}: EventListProps) {
+  const { events, isLoading, getAllEvents } = useEvents();
 
-  if (!events) {
+  useEffect(() => {
+    getAllEvents();
+  }, [getAllEvents]);
+
+  if (isLoading) {
     return (
       <div className="flex justify-center py-12">
         <Spinner />
@@ -114,12 +117,13 @@ export default function EventList({ userId, filter, onEventClick }: EventListPro
     );
   }
 
-  const now = Date.now();
+  const now = new Date().getTime();
   const filteredEvents = (events || []).filter((event: any) => {
+    const eventDateTime = new Date(event.start_date).getTime();
     if (filter === "upcoming") {
-      return event.eventDate >= now;
+      return eventDateTime >= now;
     } else {
-      return event.eventDate < now;
+      return eventDateTime < now;
     }
   });
 
@@ -143,9 +147,9 @@ export default function EventList({ userId, filter, onEventClick }: EventListPro
     <div className="space-y-6">
       {filteredEvents.map((event: any) => (
         <EventCard
-          key={event._id}
+          key={event.id}
           event={event}
-          onEventClick={() => onEventClick(event._id)}
+          onEventClick={() => onEventClick(event.id)}
         />
       ))}
     </div>

@@ -1,15 +1,20 @@
 "use client";
 
-import { mockApi as api } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
+import { useEffect } from "react";
 import EventCard from "./EventCard";
 import Spinner from "./Spinner";
 import { CalendarDays, Ticket } from "lucide-react";
+import { useEvents } from "@/hooks/useEvents";
 
 export default function EventList() {
-  const events = useQuery(api.events.getAllEvents);
+  const { events, isLoading, getAllEvents } = useEvents();
 
-  if (!events || !Array.isArray(events)) {
+  useEffect(() => {
+    console.log("EventList: Fetching events...");
+    getAllEvents();
+  }, [getAllEvents]);
+
+  if (isLoading) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <Spinner />
@@ -17,13 +22,20 @@ export default function EventList() {
     );
   }
 
-  const upcomingEvents = events
-    .filter((event: any) => event.eventDate > Date.now())
-    .sort((a: any, b: any) => a.eventDate - b.eventDate);
+  const now = new Date().getTime();
+  const upcomingEvents = (events || [])
+    .filter((event: any) => new Date(event.start_date).getTime() > now)
+    .sort(
+      (a: any, b: any) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
 
-  const pastEvents = events
-    .filter((event: any) => event.eventDate <= Date.now())
-    .sort((a: any, b: any) => b.eventDate - a.eventDate);
+  const pastEvents = (events || [])
+    .filter((event: any) => new Date(event.start_date).getTime() <= now)
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+    );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -49,7 +61,7 @@ export default function EventList() {
       {upcomingEvents.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {upcomingEvents.map((event: any) => (
-            <EventCard key={event._id} eventId={event._id} />
+            <EventCard key={event.id} eventId={event.id} />
           ))}
         </div>
       ) : (
@@ -68,7 +80,7 @@ export default function EventList() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Past Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pastEvents.map((event: any) => (
-              <EventCard key={event._id} eventId={event._id} />
+              <EventCard key={event.id} eventId={event.id} />
             ))}
           </div>
         </>

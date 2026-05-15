@@ -1,8 +1,8 @@
 "use client";
 
-import { mockApi as api } from "@/lib/mockHooks";
-import { useQuery } from "@/lib/mockHooks";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useEvents } from "@/hooks/useEvents";
 import EventCard from "@/components/EventCard";
 import { Search } from "lucide-react";
 import Spinner from "@/components/Spinner";
@@ -10,16 +10,50 @@ import Spinner from "@/components/Spinner";
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const searchResultsData = useQuery(api.events.search, { searchTerm: query });
-  const searchResults = searchResultsData || [];
+  const { events, isLoading, getAllEvents } = useEvents();
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
+  useEffect(() => {
+    getAllEvents();
+  }, [getAllEvents]);
+
+  useEffect(() => {
+    if (query.trim() && events.length > 0) {
+      // Filter events by title or description
+      const results = events.filter(
+        (event: any) =>
+          event.title?.toLowerCase().includes(query.toLowerCase()) ||
+          event.description?.toLowerCase().includes(query.toLowerCase()) ||
+          event.location?.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [query, events]);
+
+  const now = new Date().getTime();
   const upcomingEvents = searchResults
-    .filter((event: any) => event.eventDate > Date.now())
-    .sort((a: any, b: any) => a.eventDate - b.eventDate);
+    .filter((event: any) => new Date(event.start_date).getTime() > now)
+    .sort(
+      (a: any, b: any) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
 
   const pastEvents = searchResults
-    .filter((event: any) => event.eventDate <= Date.now())
-    .sort((a: any, b: any) => b.eventDate - a.eventDate);
+    .filter((event: any) => new Date(event.start_date).getTime() <= now)
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+    );
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -58,7 +92,7 @@ export default function SearchPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingEvents.map((event: any) => (
-                <EventCard key={event._id} eventId={event._id} />
+                <EventCard key={event.id} eventId={event.id} />
               ))}
             </div>
           </div>
@@ -72,7 +106,7 @@ export default function SearchPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map((event: any) => (
-                <EventCard key={event._id} eventId={event._id} />
+                <EventCard key={event.id} eventId={event.id} />
               ))}
             </div>
           </div>

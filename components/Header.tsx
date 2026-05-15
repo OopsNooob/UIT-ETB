@@ -1,11 +1,11 @@
 "use client";
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@/lib/mockComponents";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/images/logo.png";
 import SearchBar from "./SearchBar";
-import { useUser } from "@/lib/mockHooks";
+import UserProfile from "./UserProfile";
+import { useAuth } from "@/hooks/useAuth";
 import { Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ const ADMIN_EMAILS = ["dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com", "23
 const ORGANIZER_EMAILS = ["organizer@example.com", "dodinhkhang8@gmail.com", "hoanghiepta2005@gmail.com"];
 
 function Header() {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOrganizer, setIsOrganizer] = useState(false);
 
@@ -21,8 +21,12 @@ function Header() {
     if (user?.email) {
       setIsAdmin(ADMIN_EMAILS.includes(user.email));
       setIsOrganizer(ORGANIZER_EMAILS.includes(user.email));
+    } else {
+      // Reset when user logs out
+      setIsAdmin(false);
+      setIsOrganizer(false);
     }
-  }, [user?.email]);
+  }, [user, isAuthenticated]);
 
   return (
     <div className="border-b">
@@ -39,16 +43,15 @@ function Header() {
           </Link>
 
           <div className="lg:hidden">
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
+            {user ? (
+              <UserProfile />
+            ) : (
+              <Link href="/sign-in">
                 <button className="bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
                   Sign In
                 </button>
-              </SignInButton>
-            </SignedOut>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -58,7 +61,7 @@ function Header() {
         </div>
 
         <div className="hidden lg:block ml-auto">
-          <SignedIn>
+          {user ? (
             <div className="flex items-center gap-3">
               {/* Navigation dựa trên role */}
               {isOrganizer ? (
@@ -104,53 +107,59 @@ function Header() {
                   Settings
                 </button>
               </Link>
-              <UserButton />
+              <UserProfile />
             </div>
-          </SignedIn>
-
-          <SignedOut>
-            <SignInButton mode="modal">
+          ) : (
+            <Link href="/sign-in">
               <button className="bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
                 Sign In
               </button>
-            </SignInButton>
-          </SignedOut>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Action Buttons */}
         <div className="lg:hidden w-full flex justify-center gap-2">
-          <SignedIn>
-            {isOrganizer ? (
-              <>
-                <Link href="/seller/dashboard" className="flex-1">
-                  <button className="w-full bg-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-blue-700 transition">
-                    Dashboard
-                  </button>
-                </Link>
-                <Link href="/seller/events" className="flex-1">
+          {user ? (
+            <>
+              {isOrganizer ? (
+                <>
+                  <Link href="/seller/dashboard" className="flex-1">
+                    <button className="w-full bg-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-blue-700 transition">
+                      Dashboard
+                    </button>
+                  </Link>
+                  <Link href="/seller/events" className="flex-1">
+                    <button className="w-full bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
+                      My Events
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <Link href="/tickets" className="flex-1">
                   <button className="w-full bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
-                    My Events
+                    My Tickets
                   </button>
                 </Link>
-              </>
-            ) : (
-              <Link href="/tickets" className="flex-1">
-                <button className="w-full bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
-                  My Tickets
-                </button>
-              </Link>
-            )}
-            
-            {/* Admin Button Mobile - chỉ hiển thị cho admin */}
-            {isAdmin && (
-              <Link href="/admin/migration">
-                <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2 shadow-md">
-                  <Shield className="w-4 h-4" />
-                  Admin
-                </button>
-              </Link>
-            )}
-          </SignedIn>
+              )}
+              
+              {/* Admin Button Mobile - chỉ hiển thị cho admin */}
+              {isAdmin && (
+                <Link href="/admin/migration">
+                  <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1.5 text-sm rounded-lg hover:from-purple-700 hover:to-blue-700 transition flex items-center gap-2 shadow-md">
+                    <Shield className="w-4 h-4" />
+                    Admin
+                  </button>
+                </Link>
+              )}
+            </>
+          ) : (
+            <Link href="/sign-in" className="w-full">
+              <button className="w-full bg-gray-100 text-gray-800 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-200 transition border border-gray-300">
+                Sign In
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

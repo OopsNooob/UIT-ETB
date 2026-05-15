@@ -1,19 +1,17 @@
 "use client";
 
-import { useUser } from "@/lib/mockHooks";
+import { useAuth } from "@/hooks/useAuth";
 import EventList from "./EventList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, History } from "lucide-react";
 import { useRouter } from "next/navigation";
-// Mock Id - no longer needed
-// import { Id } from "@/convex/_generated/dataModel";
 import RoleGuard from "@/components/RoleGuard";
 
 // Prevent static prerendering for this page
 export const dynamic = "force-dynamic";
 
 export default function SellerEventsPage() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const router = useRouter();
 
   if (!user) {
@@ -49,7 +47,7 @@ export default function SellerEventsPage() {
               <EventList 
                 userId={user.id} 
                 filter="upcoming"
-                onEventClick={(eventId: Id<"events">) => router.push(`/seller/events/${eventId}`)}
+                onEventClick={(eventId) => router.push(`/seller/events/${eventId}`)}
               />
             </TabsContent>
 
@@ -57,7 +55,7 @@ export default function SellerEventsPage() {
               <EventList 
                 userId={user.id} 
                 filter="past"
-                onEventClick={(eventId: Id<"events">) => router.push(`/seller/events/${eventId}`)}
+                onEventClick={(eventId) => router.push(`/seller/events/${eventId}`)}
               />
             </TabsContent>
           </Tabs>

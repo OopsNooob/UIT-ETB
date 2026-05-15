@@ -78,23 +78,25 @@ function SellerEventCard({
         <div className="flex items-start gap-6">
           {/* Event Image */}
           {imageUrl && (
-            <div className="relative w-40 h-40 rounded-lg overflow-hidden shrink-0">
+            <Link href={`/seller/events/${event.id || event._id}`} className="relative w-40 h-40 rounded-lg overflow-hidden shrink-0 block hover:opacity-90 transition-opacity">
               <Image
                 src={imageUrl}
                 alt={event.name}
                 fill
                 className="object-cover"
               />
-            </div>
+            </Link>
           )}
 
           {/* Event Details */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {event.name}
-                </h3>
+                <Link href={`/seller/events/${event.id || event._id}`}>
+                  <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                    {event.title || event.name}
+                  </h3>
+                </Link>
                 <p className="mt-1 text-gray-500">{event.description}</p>
                 {event.is_cancelled && (
                   <div className="mt-2 flex items-center gap-2 text-red-600">
@@ -109,13 +111,20 @@ function SellerEventCard({
                 {!isPastEvent && !event.is_cancelled && (
                   <>
                     <Link
-                      href={`/seller/events/${event._id}/edit`}
+                      href={`/seller/events/${event.id || event._id}`}
+                      className="shrink-0 flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                    >
+                      <InfoIcon className="w-4 h-4" />
+                      View
+                    </Link>
+                    <Link
+                      href={`/seller/events/${event.id || event._id}/edit`}
                       className="shrink-0 flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                     >
                       <Edit className="w-4 h-4" />
                       Edit
                     </Link>
-                    <CancelEventButton eventId={event._id} />
+                    <CancelEventButton eventId={event.id || event._id} />
                   </>
                 )}
               </div>
@@ -157,10 +166,7 @@ function SellerEventCard({
                   </span>
                 </div>
                 <p className="text-2xl font-semibold text-gray-900">
-                  £
-                  {event.is_cancelled
-                    ? event.metrics.refundedTickets * event.price
-                    : event.metrics.revenue}
+                  £{event.metrics?.revenue || 0}
                 </p>
               </div>
 

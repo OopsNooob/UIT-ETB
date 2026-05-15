@@ -29,7 +29,7 @@ export default function EventDetailsPage() {
   }
   // Calculate tickets sold from actual tickets
   const ticketsSold = (tickets || []).length;
-  const revenue = ticketsSold * (event?.price || 0);
+  const revenue = (tickets || []).reduce((acc: number, ticket: any) => acc + (ticket.price || 0), 0);
   const attendees = (tickets || []).filter((t: any) => t.status === "used").length;
 
   return (
@@ -75,7 +75,7 @@ export default function EventDetailsPage() {
 
             {/* Event Info */}
             <div className="md:w-2/3 p-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{event.name}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">{event.name || event.title}</h1>
               <p className="text-gray-600 mb-6">{event.description}</p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -103,18 +103,10 @@ export default function EventDetailsPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <DollarSign className="w-6 h-6 text-green-600" />
-                  <div>
-                    <p className="text-sm text-gray-600">Price</p>
-                    <p className="font-semibold">£{event.price.toFixed(2)}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
                   <Ticket className="w-6 h-6 text-purple-600" />
                   <div>
                     <p className="text-sm text-gray-600">Total Tickets</p>
-                    <p className="font-semibold">{event.totalTickets}</p>
+                    <p className="font-semibold">{event.totalTickets || event.capacity || event.total_capacity}</p>
                   </div>
                 </div>
               </div>
@@ -132,7 +124,7 @@ export default function EventDetailsPage() {
                   {ticketsSold}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
-                  of {event.totalTickets} total
+                  of {event.totalTickets || event.capacity || event.total_capacity} total
                 </p>
               </div>
               <Ticket className="w-12 h-12 text-blue-600" />
@@ -226,7 +218,7 @@ export default function EventDetailsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                        £{event.price.toFixed(2)}
+                        £{(ticket.price || 0).toFixed(2)}
                       </td>
                     </tr>
                   ))
