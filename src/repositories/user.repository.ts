@@ -14,7 +14,7 @@ export class UserRepository {
 
     const whereClause = { deleted_at: null };
 
-    const [items, total] = await prisma.$transaction([
+    const [items, total] = await Promise.all([
       prisma.user.findMany({
         where: whereClause,
         orderBy: { created_at: "desc" },

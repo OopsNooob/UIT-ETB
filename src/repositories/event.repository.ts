@@ -42,7 +42,7 @@ export class EventRepository {
       ? { organizer_id: organizerId, deleted_at: null }
       : { deleted_at: null };
 
-    const [items, total] = await prisma.$transaction([
+    const [items, total] = await Promise.all([
       prisma.event.findMany({
         where: whereClause,
         orderBy: { created_at: "desc" },

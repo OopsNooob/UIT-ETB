@@ -854,3 +854,7 @@ Stack: AppError: Cannot delete: Organizer has created events
     at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
 [2026-05-17 10:32:47] [INFO] SYS-000: DB is working.
 [2026-05-17 10:33:46] [INFO] SYS-000: DB is working.
+[2026-05-17 10:38:21] [INFO] Health Monitor Cron Job started...
+[2026-05-17 10:38:21] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 10:38:21] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 10:39:21] [INFO] SYS-000: DB is working.
