@@ -119,3 +119,202 @@ Stack: AppError: Your account has been banned
 Stack: AppError: Your account has been banned
     at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:57:13)
     at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-15 22:24:41] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:57:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-15 22:42:53] [ERROR] Unhandled Exception: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+[2026-05-16 21:51:54] [ERROR] Unhandled Exception: 
+Invalid `prisma.user.findUnique()` invocation:
+
+{
+  where: {
+    email: undefined,
+    deleted_at: null,
+?   id?: String,
+?   AND?: UserWhereInput | UserWhereInput[],
+?   OR?: UserWhereInput[],
+?   NOT?: UserWhereInput | UserWhereInput[],
+?   name?: StringFilter | String,
+?   phone?: StringNullableFilter | String | Null,
+?   role?: EnumRoleFilter | Role,
+?   status?: EnumUserStatusFilter | UserStatus,
+?   password_hash?: StringFilter | String,
+?   is_active?: BoolFilter | Boolean,
+?   created_at?: DateTimeFilter | DateTime,
+?   updated_at?: DateTimeFilter | DateTime,
+?   organized_events?: EventListRelationFilter,
+?   created_events?: EventListRelationFilter,
+?   updated_events?: EventListRelationFilter,
+?   created_ticket_types?: TicketTypeListRelationFilter,
+?   updated_ticket_types?: TicketTypeListRelationFilter,
+?   created_giftcodes?: GiftcodeListRelationFilter,
+?   updated_giftcodes?: GiftcodeListRelationFilter,
+?   purchases?: PurchaseListRelationFilter,
+?   tickets?: TicketListRelationFilter,
+?   waiting_lists?: WaitingListListRelationFilter,
+?   audit_logs?: AuditLogListRelationFilter,
+?   giftcode_redemptions?: GiftcodeRedemptionListRelationFilter
+  }
+}
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.user.findUnique()` invocation:
+
+{
+  where: {
+    email: undefined,
+    deleted_at: null,
+?   id?: String,
+?   AND?: UserWhereInput | UserWhereInput[],
+?   OR?: UserWhereInput[],
+?   NOT?: UserWhereInput | UserWhereInput[],
+?   name?: StringFilter | String,
+?   phone?: StringNullableFilter | String | Null,
+?   role?: EnumRoleFilter | Role,
+?   status?: EnumUserStatusFilter | UserStatus,
+?   password_hash?: StringFilter | String,
+?   is_active?: BoolFilter | Boolean,
+?   created_at?: DateTimeFilter | DateTime,
+?   updated_at?: DateTimeFilter | DateTime,
+?   organized_events?: EventListRelationFilter,
+?   created_events?: EventListRelationFilter,
+?   updated_events?: EventListRelationFilter,
+?   created_ticket_types?: TicketTypeListRelationFilter,
+?   updated_ticket_types?: TicketTypeListRelationFilter,
+?   created_giftcodes?: GiftcodeListRelationFilter,
+?   updated_giftcodes?: GiftcodeListRelationFilter,
+?   purchases?: PurchaseListRelationFilter,
+?   tickets?: TicketListRelationFilter,
+?   waiting_lists?: WaitingListListRelationFilter,
+?   audit_logs?: AuditLogListRelationFilter,
+?   giftcode_redemptions?: GiftcodeRedemptionListRelationFilter
+  }
+}
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+    at throwValidationException (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:46:9)
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:211:7)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async UserRepository.findByEmail (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\repositories\user.repository.ts:6:12)
+    at async AuthService.updateProfile (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:104:28)
+    at async AuthControllerClass.updateProfile (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:97:22)
+[2026-05-16 22:10:50] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:12:51] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:22:51] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:34:50] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 23:38:48] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 23:41:15] [ERROR] Unhandled Exception: Cannot ban this account as it was already banned
+Stack: AppError: Cannot ban this account as it was already banned
+    at AuthService.banUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:144:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.ban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:141:22)
+[2026-05-16 23:44:38] [ERROR] Unhandled Exception: Admins cannot change their own ban status
+Stack: AppError: Admins cannot change their own ban status
+    at AuthService.unbanUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:165:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.unban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:159:22)
+[2026-05-16 23:45:47] [ERROR] Unhandled Exception: Cannot unban this account as it was already active
+Stack: AppError: Cannot unban this account as it was already active
+    at AuthService.unbanUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:169:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.unban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:159:22)
+[2026-05-16 23:46:04] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:60:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:42:22)
+[2026-05-17 09:34:11] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-17 10:20:02] [ERROR] Unhandled Exception: Cannot delete: User has transaction history
+Stack: AppError: Cannot delete: User has transaction history
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:209:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:20:25] [ERROR] Unhandled Exception: Cannot delete: User has transaction history
+Stack: AppError: Cannot delete: User has transaction history
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:209:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:22:06] [ERROR] Unhandled Exception: 
+Invalid `prisma.user.update()` invocation:
+
+{
+  where: {
+    id: "82c1ccf5-bd02-4673-ad31-ca8480a45d1d"
+  },
+  data: {
+    deleted_at: "1778988125921"
+                ~~~~~~~~~~~~~~~
+  },
+  omit: {
+    password_hash: true
+  }
+}
+
+Invalid value for argument `deleted_at`: input contains invalid characters. Expected ISO-8601 DateTime.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.user.update()` invocation:
+
+{
+  where: {
+    id: "82c1ccf5-bd02-4673-ad31-ca8480a45d1d"
+  },
+  data: {
+    deleted_at: "1778988125921"
+                ~~~~~~~~~~~~~~~
+  },
+  omit: {
+    password_hash: true
+  }
+}
+
+Invalid value for argument `deleted_at`: input contains invalid characters. Expected ISO-8601 DateTime.
+    at throwValidationException (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:46:9)
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:211:7)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async UserRepository.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\repositories\user.repository.ts:85:12)
+    at async AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:212:12)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:27:53] [ERROR] Unhandled Exception: Your username or password might be wrong. Please check and try again later.
+Stack: AppError: Your username or password might be wrong. Please check and try again later.
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:57:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:42:22)
+[2026-05-17 10:31:16] [ERROR] Unhandled Exception: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+[2026-05-17 10:32:26] [ERROR] Unhandled Exception: Cannot delete: Organizer has created events
+Stack: AppError: Cannot delete: Organizer has created events
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:203:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)

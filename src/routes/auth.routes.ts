@@ -1,4 +1,4 @@
-import { AuthController } from "../controllers/auth.controller";
+import { AuthController } from "../controllers/user.controller";
 import { Router } from "express";
 import { withAuthGuard } from "../middlewares/auth.middleware";
 

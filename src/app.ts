@@ -8,6 +8,7 @@ import authRoute from "./routes/auth.routes";
 import loggingRoute from "./routes/logging.route";
 import eventRoutes from "./routes/event.routes";
 import ticketRoutes from "./routes/ticket.routes";
+import userRoutes from "./routes/user.routes";
 import requestIp from "request-ip";
 
 const app = express();
@@ -40,6 +41,9 @@ app.get("/api/v1/health", (req, res) => {
 
 // Auth
 app.use("/api/v1/auth", authRoute);
+
+// Users
+app.use("/api/v1/users", userRoutes);
 
 // Logging
 app.use("/api/v1/logs", loggingRoute);

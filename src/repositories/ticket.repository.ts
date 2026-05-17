@@ -17,4 +17,14 @@ export class TicketRepository {
       orderBy: { created_at: "asc" },
     });
   }
+
+  async getTicketByUserId(userId: string) {
+    return prisma.ticket.findMany({
+      where: {
+        user_id: userId,
+        deleted_at: null,
+      },
+      orderBy: { created_at: "desc" },
+    });
+  }
 }

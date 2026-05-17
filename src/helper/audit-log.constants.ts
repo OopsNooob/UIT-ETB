@@ -115,6 +115,18 @@ export const AuditEvent = {
       code: "BUS-016",
       description: "Event is updated successfully.",
     },
+    BAN: {
+      code: "BUS-017",
+      description: "Selected user is banned successfully.",
+    },
+    UNBAN: {
+      code: "BUS-018",
+      description: "Selected user is unbanned successfully.",
+    },
+    DELETE: {
+      code: "BUS-019",
+      description: "Selected user is deleted successfully.",
+    },
   },
 
   SYSTEM: {

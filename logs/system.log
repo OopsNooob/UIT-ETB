@@ -522,3 +522,335 @@ Stack: AppError: Your account has been banned
     at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
 [2026-05-15 22:13:41] [INFO] SYS-000: DB is working.
 [2026-05-15 22:14:40] [INFO] SYS-000: DB is working.
+[2026-05-15 22:21:20] [INFO] Health Monitor Cron Job started...
+[2026-05-15 22:21:21] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-15 22:21:21] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-15 22:21:59] [INFO] [STARTUP] Next.js server initializing - instrumentation hook triggered
+[2026-05-15 22:21:59] [INFO] [STARTUP] Database connection and health monitor ready
+[2026-05-15 22:22:23] [INFO] SYS-000: DB is working.
+[2026-05-15 22:23:21] [INFO] SYS-000: DB is working.
+[2026-05-15 22:24:22] [INFO] SYS-000: DB is working.
+[2026-05-15 22:24:41] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\auth.service.ts:57:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\auth.controller.ts:42:22)
+[2026-05-15 22:25:21] [INFO] SYS-000: DB is working.
+[2026-05-15 22:26:21] [INFO] SYS-000: DB is working.
+[2026-05-15 22:27:21] [INFO] SYS-000: DB is working.
+[2026-05-15 22:28:22] [INFO] SYS-000: DB is working.
+[2026-05-15 22:29:21] [INFO] SYS-000: DB is working.
+[2026-05-15 22:41:54] [INFO] [STARTUP] Next.js server initializing - instrumentation hook triggered
+[2026-05-15 22:41:54] [INFO] [STARTUP] Database connection and health monitor ready
+[2026-05-15 22:41:56] [INFO] Health Monitor Cron Job started...
+[2026-05-15 22:41:57] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-15 22:41:57] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-15 22:42:53] [ERROR] Unhandled Exception: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+[2026-05-15 22:42:56] [INFO] SYS-000: DB is working.
+[2026-05-15 22:43:57] [INFO] SYS-000: DB is working.
+[2026-05-15 22:44:57] [INFO] SYS-000: DB is working.
+[2026-05-16 21:45:56] [INFO] Health Monitor Cron Job started...
+[2026-05-16 21:45:57] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 21:45:57] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 21:46:57] [INFO] SYS-000: DB is working.
+[2026-05-16 21:47:59] [INFO] SYS-000: DB is working.
+[2026-05-16 21:48:58] [INFO] SYS-000: DB is working.
+[2026-05-16 21:49:57] [INFO] SYS-000: DB is working.
+[2026-05-16 21:50:58] [INFO] SYS-000: DB is working.
+[2026-05-16 21:51:07] [INFO] Health Monitor Cron Job started...
+[2026-05-16 21:51:07] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 21:51:07] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 21:51:54] [ERROR] Unhandled Exception: 
+Invalid `prisma.user.findUnique()` invocation:
+
+{
+  where: {
+    email: undefined,
+    deleted_at: null,
+?   id?: String,
+?   AND?: UserWhereInput | UserWhereInput[],
+?   OR?: UserWhereInput[],
+?   NOT?: UserWhereInput | UserWhereInput[],
+?   name?: StringFilter | String,
+?   phone?: StringNullableFilter | String | Null,
+?   role?: EnumRoleFilter | Role,
+?   status?: EnumUserStatusFilter | UserStatus,
+?   password_hash?: StringFilter | String,
+?   is_active?: BoolFilter | Boolean,
+?   created_at?: DateTimeFilter | DateTime,
+?   updated_at?: DateTimeFilter | DateTime,
+?   organized_events?: EventListRelationFilter,
+?   created_events?: EventListRelationFilter,
+?   updated_events?: EventListRelationFilter,
+?   created_ticket_types?: TicketTypeListRelationFilter,
+?   updated_ticket_types?: TicketTypeListRelationFilter,
+?   created_giftcodes?: GiftcodeListRelationFilter,
+?   updated_giftcodes?: GiftcodeListRelationFilter,
+?   purchases?: PurchaseListRelationFilter,
+?   tickets?: TicketListRelationFilter,
+?   waiting_lists?: WaitingListListRelationFilter,
+?   audit_logs?: AuditLogListRelationFilter,
+?   giftcode_redemptions?: GiftcodeRedemptionListRelationFilter
+  }
+}
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.user.findUnique()` invocation:
+
+{
+  where: {
+    email: undefined,
+    deleted_at: null,
+?   id?: String,
+?   AND?: UserWhereInput | UserWhereInput[],
+?   OR?: UserWhereInput[],
+?   NOT?: UserWhereInput | UserWhereInput[],
+?   name?: StringFilter | String,
+?   phone?: StringNullableFilter | String | Null,
+?   role?: EnumRoleFilter | Role,
+?   status?: EnumUserStatusFilter | UserStatus,
+?   password_hash?: StringFilter | String,
+?   is_active?: BoolFilter | Boolean,
+?   created_at?: DateTimeFilter | DateTime,
+?   updated_at?: DateTimeFilter | DateTime,
+?   organized_events?: EventListRelationFilter,
+?   created_events?: EventListRelationFilter,
+?   updated_events?: EventListRelationFilter,
+?   created_ticket_types?: TicketTypeListRelationFilter,
+?   updated_ticket_types?: TicketTypeListRelationFilter,
+?   created_giftcodes?: GiftcodeListRelationFilter,
+?   updated_giftcodes?: GiftcodeListRelationFilter,
+?   purchases?: PurchaseListRelationFilter,
+?   tickets?: TicketListRelationFilter,
+?   waiting_lists?: WaitingListListRelationFilter,
+?   audit_logs?: AuditLogListRelationFilter,
+?   giftcode_redemptions?: GiftcodeRedemptionListRelationFilter
+  }
+}
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+    at throwValidationException (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:46:9)
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:211:7)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async UserRepository.findByEmail (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\repositories\user.repository.ts:6:12)
+    at async AuthService.updateProfile (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:104:28)
+    at async AuthControllerClass.updateProfile (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:97:22)
+[2026-05-16 21:52:09] [INFO] SYS-000: DB is working.
+[2026-05-16 21:53:08] [INFO] SYS-000: DB is working.
+[2026-05-16 21:54:08] [INFO] SYS-000: DB is working.
+[2026-05-16 21:55:08] [INFO] SYS-000: DB is working.
+[2026-05-16 21:56:08] [INFO] SYS-000: DB is working.
+[2026-05-16 21:57:08] [INFO] SYS-000: DB is working.
+[2026-05-16 21:58:09] [INFO] SYS-000: DB is working.
+[2026-05-16 21:59:10] [INFO] SYS-000: DB is working.
+[2026-05-16 22:00:08] [INFO] SYS-000: DB is working.
+[2026-05-16 22:01:08] [INFO] SYS-000: DB is working.
+[2026-05-16 22:02:10] [INFO] SYS-000: DB is working.
+[2026-05-16 22:03:08] [INFO] SYS-000: DB is working.
+[2026-05-16 22:04:08] [INFO] SYS-000: DB is working.
+[2026-05-16 22:05:08] [INFO] SYS-000: DB is working.
+[2026-05-16 22:05:47] [INFO] Health Monitor Cron Job started...
+[2026-05-16 22:05:51] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 22:05:51] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 22:06:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:07:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:08:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:09:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:10:50] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:11:49] [INFO] SYS-007: Connection successfully reconnected to PostgreSQL Database.
+[2026-05-16 22:12:51] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:13:49] [INFO] SYS-007: Connection successfully reconnected to PostgreSQL Database.
+[2026-05-16 22:14:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:15:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:16:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:17:51] [INFO] SYS-000: DB is working.
+[2026-05-16 22:18:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:19:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:20:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:21:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:22:51] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:23:49] [INFO] SYS-007: Connection successfully reconnected to PostgreSQL Database.
+[2026-05-16 22:24:50] [INFO] SYS-000: DB is working.
+[2026-05-16 22:25:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:26:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:27:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:28:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:29:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:30:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:31:49] [INFO] SYS-000: DB is working.
+[2026-05-16 22:33:47] [INFO] Health Monitor Cron Job started...
+[2026-05-16 22:33:47] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 22:33:47] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 22:34:50] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 22:35:35] [INFO] Health Monitor Cron Job started...
+[2026-05-16 22:35:35] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 22:35:35] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 22:36:37] [INFO] SYS-000: DB is working.
+[2026-05-16 22:37:38] [INFO] SYS-000: DB is working.
+[2026-05-16 23:37:45] [INFO] Health Monitor Cron Job started...
+[2026-05-16 23:37:45] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 23:37:45] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 23:38:48] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-16 23:39:12] [INFO] Health Monitor Cron Job started...
+[2026-05-16 23:39:13] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-16 23:39:13] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-16 23:40:13] [INFO] SYS-000: DB is working.
+[2026-05-16 23:41:14] [INFO] SYS-000: DB is working.
+[2026-05-16 23:41:15] [ERROR] Unhandled Exception: Cannot ban this account as it was already banned
+Stack: AppError: Cannot ban this account as it was already banned
+    at AuthService.banUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:144:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.ban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:141:22)
+[2026-05-16 23:42:14] [INFO] SYS-000: DB is working.
+[2026-05-16 23:43:14] [INFO] SYS-000: DB is working.
+[2026-05-16 23:44:13] [INFO] SYS-000: DB is working.
+[2026-05-16 23:44:38] [ERROR] Unhandled Exception: Admins cannot change their own ban status
+Stack: AppError: Admins cannot change their own ban status
+    at AuthService.unbanUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:165:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.unban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:159:22)
+[2026-05-16 23:45:14] [INFO] SYS-000: DB is working.
+[2026-05-16 23:45:47] [ERROR] Unhandled Exception: Cannot unban this account as it was already active
+Stack: AppError: Cannot unban this account as it was already active
+    at AuthService.unbanUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:169:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.unban (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:159:22)
+[2026-05-16 23:46:04] [ERROR] Unhandled Exception: Your account has been banned
+Stack: AppError: Your account has been banned
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:60:13)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:42:22)
+[2026-05-16 23:46:13] [INFO] SYS-000: DB is working.
+[2026-05-16 23:47:14] [INFO] SYS-000: DB is working.
+[2026-05-16 23:48:14] [INFO] SYS-000: DB is working.
+[2026-05-17 09:33:08] [INFO] Health Monitor Cron Job started...
+[2026-05-17 09:33:11] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 09:33:11] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 09:34:11] [ERROR] SYS-001: DB is down. Details: Database health check timed out after 3s
+[2026-05-17 09:34:38] [INFO] Health Monitor Cron Job started...
+[2026-05-17 09:34:38] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 09:34:38] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 09:35:38] [INFO] SYS-000: DB is working.
+[2026-05-17 09:36:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:37:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:38:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:39:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:40:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:41:40] [INFO] SYS-000: DB is working.
+[2026-05-17 09:42:39] [INFO] SYS-000: DB is working.
+[2026-05-17 09:43:39] [INFO] SYS-000: DB is working.
+[2026-05-17 10:18:22] [INFO] Health Monitor Cron Job started...
+[2026-05-17 10:18:23] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 10:18:23] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 10:19:25] [INFO] SYS-000: DB is working.
+[2026-05-17 10:20:02] [ERROR] Unhandled Exception: Cannot delete: User has transaction history
+Stack: AppError: Cannot delete: User has transaction history
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:209:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:20:23] [INFO] SYS-000: DB is working.
+[2026-05-17 10:20:25] [ERROR] Unhandled Exception: Cannot delete: User has transaction history
+Stack: AppError: Cannot delete: User has transaction history
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:209:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:20:59] [INFO] Health Monitor Cron Job started...
+[2026-05-17 10:21:00] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 10:21:00] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 10:22:01] [INFO] SYS-000: DB is working.
+[2026-05-17 10:22:06] [ERROR] Unhandled Exception: 
+Invalid `prisma.user.update()` invocation:
+
+{
+  where: {
+    id: "82c1ccf5-bd02-4673-ad31-ca8480a45d1d"
+  },
+  data: {
+    deleted_at: "1778988125921"
+                ~~~~~~~~~~~~~~~
+  },
+  omit: {
+    password_hash: true
+  }
+}
+
+Invalid value for argument `deleted_at`: input contains invalid characters. Expected ISO-8601 DateTime.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.user.update()` invocation:
+
+{
+  where: {
+    id: "82c1ccf5-bd02-4673-ad31-ca8480a45d1d"
+  },
+  data: {
+    deleted_at: "1778988125921"
+                ~~~~~~~~~~~~~~~
+  },
+  omit: {
+    password_hash: true
+  }
+}
+
+Invalid value for argument `deleted_at`: input contains invalid characters. Expected ISO-8601 DateTime.
+    at throwValidationException (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:46:9)
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:211:7)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async UserRepository.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\repositories\user.repository.ts:85:12)
+    at async AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:212:12)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:23:00] [INFO] SYS-000: DB is working.
+[2026-05-17 10:26:16] [INFO] Health Monitor Cron Job started...
+[2026-05-17 10:26:17] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 10:26:17] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 10:27:18] [INFO] SYS-000: DB is working.
+[2026-05-17 10:27:53] [ERROR] Unhandled Exception: Your username or password might be wrong. Please check and try again later.
+Stack: AppError: Your username or password might be wrong. Please check and try again later.
+    at AuthService.loginUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:57:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.login (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:42:22)
+[2026-05-17 10:28:18] [INFO] SYS-000: DB is working.
+[2026-05-17 10:28:45] [INFO] Health Monitor Cron Job started...
+[2026-05-17 10:28:46] [INFO] 🚀 Server is running smoothly on port 3000
+[2026-05-17 10:28:46] [INFO] 👉 Check health at: http://localhost:3000/api/v1/health
+[2026-05-17 10:29:46] [INFO] SYS-000: DB is working.
+[2026-05-17 10:30:48] [INFO] SYS-000: DB is working.
+[2026-05-17 10:31:16] [ERROR] Unhandled Exception: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation:
+
+
+Transaction API error: Unable to start a transaction in the given time.
+    at zr.handleRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at async a (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+[2026-05-17 10:31:46] [INFO] SYS-000: DB is working.
+[2026-05-17 10:32:26] [ERROR] Unhandled Exception: Cannot delete: Organizer has created events
+Stack: AppError: Cannot delete: Organizer has created events
+    at AuthService.deleteUser (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\services\user.service.ts:203:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthControllerClass.delete (D:\UIT\3rd_year\HK4\KTPM\DoAn\UIT-ETB\src\controllers\user.controller.ts:196:7)
+[2026-05-17 10:32:47] [INFO] SYS-000: DB is working.
+[2026-05-17 10:33:46] [INFO] SYS-000: DB is working.
